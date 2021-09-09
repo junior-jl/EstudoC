@@ -1,3 +1,5 @@
+# Anotações
+
 - **Problema com variáveis tipo char**
 
 Antes de o valor ser designado a uma variável *char*, passa pelo buffer (espaço de memória temporário).
@@ -11,3 +13,7 @@ De acordo com alguns sites, essa função tem comportamento indefinido, então, 
 while((getchar())!='\n'); ------- C
 
 cin >> ws ------- C++
+
+- **Valor absoluto (abs)**
+
+Aparentemente, a função abs() só funciona para valores inteiros, para float deve-se utilizar fabs();
