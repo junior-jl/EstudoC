@@ -45,3 +45,14 @@ sizeof() : retorna o tamanho de uma variável
 & : retorna o endereço de uma variável
 
 \* : ponteiro para uma variável
+
+## Funções importantes
+
+- **Loop "for"**
+
+```c
+for(_declaração inicial_; _expressão condicional_; _expressão de iteração_){_loop statement_}
+
+```
+
+Os termos entre parênteses são opcionais (o que pode gerar um loop infinito). Pode-se utilizar um _statement_ **break** para "sair" do loop a qualquer momento.
