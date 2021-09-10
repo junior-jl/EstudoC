@@ -16,9 +16,9 @@ while((getchar())!='\n'); ------- C
 
 ```
 
-```c++
+```cpp
 
-cin >> ws ------- C++
+std::cin >> ws ------- C++
 
 ```
 
@@ -75,3 +75,6 @@ palavra[strlen(palavra-1)] = '\0' /////// Ou seja, após o último char do vetor
 ```
 
 Para imprimir uma _string_, utiliza-se %s.
+
+Em C++, apenas a inclusão das bibliotecas <string> e <iostream> permite trabalhar com _strings_ de modo simples, sem os problemas citados anteriormente.
+
