@@ -1,3 +1,4 @@
+```c
 #include<stdio.h>
 #include<stdlib.h>
 #include<locale.h>
@@ -15,3 +16,4 @@ void main(){
     printf("O produto %f x %f x %f é igual a %f", n1,n2,n3,mult);
 
 }
+```
