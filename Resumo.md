@@ -38,6 +38,8 @@
 
 // : comentário
 
+/\* ... \*/ : comentário em bloco 
+
 sizeof() : retorna o tamanho de uma variável
 
 & : retorna o endereço de uma variável
