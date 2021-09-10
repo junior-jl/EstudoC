@@ -47,3 +47,31 @@ A função rand() gera um número pseudo-aleatório. No entanto, precisa de um v
 ```c
 srand(time(0))
 ```
+
+- **Trabalhando com strings**
+
+Para trabalhar com "palavras", cria-se um vetor de _chars_. No entanto, antes de receber uma palavra da entrada de dados principal _stdin_ deve-se limpar o _buffer_ através do seguinte comando:
+
+```c
+setbuf(stdin,0)
+```
+
+Agora, ao invés da função _scanf()_ utiliza-se _fgets()_...
+
+```c
+fgets( char          *str, int count, FILE          *stream );
+```
+
+Os parâmetros da função são:
+
+1. str	-	ponteiro para um elemento de arranjo _char_
+2. count	-	número de máximo de caracteres para escrever (geralmente o tamanho de str)
+3. stream	-	fluxo de arquivo pelo qual o dado será lido
+
+Para evitar o uso de "slots" desnecessários de vetor, faz-se a seguinte correção. Suponha a string **palavra**, a linha de código a seguir faz com que o vetor **palavra** tenha apenas o tamanho necessário para comportar a string recebida. O caracter \0 é conhecido como **terminador nulo** e indica o final de uma _string_.
+
+```c
+palavra[strlen(palavra-1)] = '\0' /////// Ou seja, após o último char do vetor, teremos \0
+```
+
+Para imprimir uma _string_, utiliza-se %s.
