@@ -1,3 +1,4 @@
+```c
 #include<stdio.h>
 #include<stdlib.h>
 #include<locale.h>
@@ -17,3 +18,4 @@ void main(){
     printf("A diferença entre as duas notas é %.2f", dif);
 
 }
+```
