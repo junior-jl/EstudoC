@@ -51,7 +51,7 @@ sizeof() : retorna o tamanho de uma variável
 - **Loop "for"**
 
 ```c
-for(_declaração inicial_; _expressão condicional_; _expressão de iteração_){_loop statement_}
+for(declaração inicial; expressão condicional; expressão de iteração){loop statement}
 
 ```
 
