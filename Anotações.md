@@ -40,7 +40,7 @@ printf("%c", a); --------- imprime "x"
 printf("%d", b); --------- imprime "120"
 ```
 
-- Geração de número aleatório
+- **Geração de número aleatório**
 
 A função rand() gera um número pseudo-aleatório. No entanto, precisa de um valor "semente" para tal, caso não seja informado nenhum valor, a função assume srand(1), assim, para que não haja repetição da sequência de valores gerados, utiliza-se a seguinte linha de código antes da geração (deve-se incluir a biblioteca time.h):
 
