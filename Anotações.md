@@ -77,4 +77,22 @@ palavra[strlen(palavra-1)] = '\0' /////// Ou seja, após o último char do vetor
 Para imprimir uma _string_, utiliza-se %s.
 
 Em C++, apenas a inclusão das bibliotecas <string> e <iostream> permite trabalhar com _strings_ de modo simples, sem os problemas citados anteriormente.
+  
+- **Ponteiros**
+  
+Variáveis armazenam valores. Ponteiros armazenam endereços de memória.
+  
+Utiliza-se o asterisco para trabalhar com ponteiros, assim, para definir o ponteiro "x", tem-se:
 
+```c
+int *x;
+```
+
+Assim, ao usar o asterisco novamente, pode-se alterar o conteúdo da memória para o qual o ponteiro x aponta. Por exemplo, se há uma variável "a" e o ponteiro x aponta para o endereço de "a", posso alterar o conteúdo da variável "a" da seguinte forma:
+  
+```c
+int a; // Declaração da variável a
+int *x; // Declaração do ponteiro x
+x = &a; // O ponteiro x recebe o endereço da variável a
+*x = 20; // O conteúdo apontado pelo ponteiro x recebe 20
+```
