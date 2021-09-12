@@ -96,3 +96,9 @@ int *x; // Declaração do ponteiro x
 x = &a; // O ponteiro x recebe o endereço da variável a
 *x = 20; // O conteúdo apontado pelo ponteiro x recebe 20
 ```
+  
+- **Limpar a tela**
+  
+```
+  system("CLS");
+```
