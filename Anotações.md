@@ -102,3 +102,24 @@ x = &a; // O ponteiro x recebe o endereço da variável a
 ```
   system("CLS");
 ```
+
+- **Implementação de função expoente para inteiros**
+  
+A função pow() da biblioteca math.h parece problemática, então implementei a função intpow() a seguir... Obviamente tem seus limites, porém teve resultado satisfatório até o momento.
+  
+  ```c
+  int intpow(int base, int exp){
+   int i,res, aux = base;
+   if(exp == 0){
+      res = 1;
+   }else{
+
+   for(i=2;i<=exp;i++){
+   base = base*aux;
+   res = base;
+   }
+}
+   return res;
+}
+
+  ```
