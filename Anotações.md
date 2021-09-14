@@ -71,7 +71,7 @@ Os parâmetros da função são:
 Para evitar o uso de "slots" desnecessários de vetor, faz-se a seguinte correção. Suponha a string **palavra**, a linha de código a seguir faz com que o vetor **palavra** tenha apenas o tamanho necessário para comportar a string recebida. O caracter \0 é conhecido como **terminador nulo** e indica o final de uma _string_.
 
 ```c
-palavra[strlen(palavra-1)] = '\0' /////// Ou seja, após o último char do vetor, teremos \0
+palavra[strlen(palavra)-1] = '\0' /////// Ou seja, após o último char do vetor, teremos \0
 ```
 
 Para imprimir uma _string_, utiliza-se %s.
