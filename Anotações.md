@@ -123,3 +123,27 @@ A função pow() da biblioteca math.h parece problemática, então implementei a
 }
 
   ```
+
+- **_goto_ statement**
+                       
+ Define-se uma _label_ em alguma linha do código, o _goto_ faz com que o programa salte para a _label_, isto é, no exemplo abaixo, o programa imprime na tela "blabla" e salta para _label_, imprimindo novamente (neste caso indefinidamente).
+                       
+ ```c
+  label:
+  printf("blabla");
+  goto label;
+ ```
+                       
+- **Função strcmp()**    
+
+É uma função da biblioteca string.h, serve para fazer comparação entre strings.
+                       
+```c
+int strcmp( const char *lhs, const char *rhs );                     
+```           
+                       
+A função tem três possíveis retornos:
+                       
+1. 0 se _lhs_ e _rhs_ são strings iguais;
+2. Valor negativo se _lhs_ precede _rhs_ em ordem lexicográfica;
+3. Valor positivo se _lhs_ sucede _rhs_ em ordem lexicográfica.                       
