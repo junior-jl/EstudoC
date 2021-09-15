@@ -147,3 +147,13 @@ A função tem três possíveis retornos:
 1. 0 se _lhs_ e _rhs_ são strings iguais;
 2. Valor negativo se _lhs_ precede _rhs_ em ordem lexicográfica;
 3. Valor positivo se _lhs_ sucede _rhs_ em ordem lexicográfica.                       
+
+- **Alocação dinâmica de memória**
+                       
+Provavelmente essa função é a solução para o problema do "vetor variável". A função
+                       
+```c
+malloc(size_t)
+```
+                       
+pertence a biblioteca _stdlib.h_ e aloca bytes de armazenamento. Essa função retorna um ponteiro para a posição do primero byte alocado.                      
