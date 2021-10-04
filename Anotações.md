@@ -156,4 +156,6 @@ Provavelmente essa função é a solução para o problema do "vetor variável".
 malloc(size_t)
 ```
                        
-pertence a biblioteca _stdlib.h_ e aloca bytes de armazenamento. Essa função retorna um ponteiro para a posição do primero byte alocado.                      
+pertence a biblioteca _stdlib.h_ e aloca bytes de armazenamento. Essa função retorna um ponteiro para a posição do primero byte alocado.     
+                       
+Quando o espaço de memória alocado não for mais necessário, é interessante utilizar a função free() para "desalocar" o espaço de memória. 
