@@ -159,3 +159,9 @@ malloc(size_t)
 pertence a biblioteca _stdlib.h_ e aloca bytes de armazenamento. Essa função retorna um ponteiro para a posição do primero byte alocado.     
                        
 Quando o espaço de memória alocado não for mais necessário, é interessante utilizar a função free() para "desalocar" o espaço de memória. 
+                       
+Em C++, utiliza-se a biblioteca <new> e a função new() para alocação de memória. O seguinte código é um exemplo de alocação dinâmica de memória em C++, no qual a variável "tamanho" foi previamente iniciada com o tamanho desejado do vetor.
+  
+```
+  int *vetor = new int[tamanho];
+```
