@@ -165,3 +165,25 @@ Em C++, utiliza-se a biblioteca <new> e a função new() para alocação de mem�
 ```
   int *vetor = new int[tamanho];
 ```
+
+- **Structs**
+
+Structs, também conhecidas como registros, permitem o armazenamento de dados de uma mesma entidade numa mesma variável. Por exemplo, se for necessário armazenar a altura, peso e idade de uma pessoa, cria-se uma struct chamada Pessoa e os dados ficam agrupados nessa única variável.
+  
+```c
+  struct Pessoa{
+    float Peso;   // define o campo Peso
+    int Idade;    // define o campo Idade
+    float Altura; // define o campo Altura
+  }
+```
+  
+Após a criação dessa struct, pode-se declarar variáveis do tipo Pessoa. Os campos da struct são acessados por NomeDaVariavel.NomeDoCampo, por exemplo,
+  
+```c
+  Pessoa Junior;
+  Junior.Peso = 82.5;
+  Junior.Idade = 22;
+  Junior.Altura = 1.80;
+```
+
