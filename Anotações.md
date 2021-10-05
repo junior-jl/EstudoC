@@ -181,7 +181,7 @@ Structs, também conhecidas como registros, permitem o armazenamento de dados de
 Após a criação dessa struct, pode-se declarar variáveis do tipo Pessoa. Os campos da struct são acessados por NomeDaVariavel.NomeDoCampo, por exemplo,
   
 ```c
-  Pessoa Junior;
+  struct Pessoa Junior;
   Junior.Peso = 82.5;
   Junior.Idade = 22;
   Junior.Altura = 1.80;
