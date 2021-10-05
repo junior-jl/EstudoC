@@ -187,3 +187,19 @@ Após a criação dessa struct, pode-se declarar variáveis do tipo Pessoa. Os c
   Junior.Altura = 1.80;
 ```
 
+- **Declaração typedef**
+  
+É uma forma de declarar um identificador como um tipo de variável a fim de evitar repetições, da mesma forma que o "using namespace std;" para evitar escrever "std::" sempre. Assim, no exemplo anterior de structs, poderia-se escrever da seguinte forma.
+  
+```c
+typedef struct{
+   float Peso;   // define o campo Peso
+   int Idade;    // define o campo Idade
+   float Altura; // define o campo Altura
+  }Pessoa;
+  
+  Pessoa Junior;
+  Junior.Peso = 82.5;
+  Junior.Idade = 22;
+  Junior.Altura = 1.80;
+```
