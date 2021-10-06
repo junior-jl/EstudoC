@@ -45,6 +45,7 @@ int persistence(int n) {
       i++;
       aux/=10;
     }
+    
     for(j=0;j<tamanho;j++){
     mult = mult*digitos[j];
       }
@@ -52,5 +53,22 @@ int persistence(int n) {
       cont++;
     }
         return cont;       
+}
+```
+
+Another user code (I thought about something similar, but didn't work that way, but this solution is WAAAY simpler!)
+
+```c
+int persistence(int n)
+{
+    int aux, cont = 0;
+    while (n > 9) {
+        ++cont;
+        aux = n % 10;
+        while (n /= 10)
+            aux *= n % 10;
+        n = aux;
+    }
+    return cont;
 }
 ```
