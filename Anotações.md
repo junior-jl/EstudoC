@@ -203,3 +203,53 @@ typedef struct{
   Junior.Idade = 22;
   Junior.Altura = 1.80;
 ```
+
+- **Escrever em arquivos**
+  
+  O código-exemplo abaixo mostra como criar um arquivo com a biblioteca **fstream** do C++.
+```c
+  #include <fstream>
+  
+  int main(){
+    ofstream arquivoDeSaida;
+    arquivoDeSaida.open("Texto.txt", std::ios_base::app);
+    arquivoDeSaida << "\nExemplo";
+    arquivoDeSaida.close();
+  return 0;
+  }
+```
+  
+- **Ler arquivos**
+  
+  C:
+  
+  ```c
+  
+  int main(){
+  
+  int c; // cursor que percorre cada letra
+  FILE *file; // arquivo a ser lido
+  file = fopen("Texto.txt", "r"); //abre o arquivo no diretório escolhido
+  if (file){
+    while((c=getc(file)) != EOF){ // enquanto o char cursor for diferente do fim do arquivo (EOF)
+      printf("%c",c);
+  }
+  fclose(file);
+  }
+  return 0;
+  }
+  ```
+  
+  C++:
+  
+  ```c
+  int main(){
+    ifstream input("Texto.txt");
+    string textoLido;
+    for(string line; getline(input,line);){
+    textoLido += line;
+  }
+  cout << textoLido;
+    return 0;
+  }
+  ```
