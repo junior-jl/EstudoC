@@ -142,3 +142,36 @@ Além disso, nesse exemplo também pode-se aprender mais sobre o funcionamento d
 Assim, a linha acima imprime na tela o valor dos dois inteiros **fahr** e **celsius** separados por um TAB (\t) e uma nova linha (\n) no final.
 
 Cada termo com % é pareada com o segundo argumento, terceiro... Dessa forma, é necessário que o número (e tipo) de termos com %d na _string_ e o dos outros argumentos seja o mesmo para que não haja erros.
+
+- **float**
+
+O programa de conversão de temperatura pode ser melhorado declarando as temperaturas como **float** ao invés de **int**. Assim, uma segunda versão do problema é mostrada abaixo:
+
+```c
+#include <stdio.h>
+main(){
+    float fahr, celsius;
+    int inferior,superior,passo;
+    inferior = 0;
+    passo = 20;
+    superior = 300;
+    fahr = inferior;
+    while (fahr <= superior){
+        celsius = (5.0/9.0)*(fahr - 32.0);
+        printf("%3.0f %6.1f\n", fahr, celsius);
+        fahr = fahr + passo;
+    }
+}
+
+```
+
+que resulta em
+
+![image](https://user-images.githubusercontent.com/69206952/136631737-641d6601-88e6-436a-9b94-5d4d1cead52e.png)
+
+As diferenças entre este código e o anterior são poucas: a declaração de **fahr** e **celsius** como **_float_**. O uso de um ponto decimal em 5.0 e 9.0 indica que as constantes
+são de ponto flutuante, permitindo a divisão sem truncamento. 
+
+Deve-se notar que caso um operador matemático possua operandos inteiros, o resultado será inteiro. No entanto, se um dos operandos for **_float_** e o outro **int**, o resultado
+é automaticamente convertido em **_float_**. Assim, caso fosse escrito **fahr - 32** ao invés de **fahr - 32.0**, o resultado seria convertido para ponto flutuante. Porém, para 
+melhor leitura, é interessante indicar o ponto decimal. De mesmo modo, o teste **fahr <= superior** e a atribuição **fahr = inferior** ocorrem naturalmente (a variável do tipo **int** é convertida em **_float_** antes da operação.
