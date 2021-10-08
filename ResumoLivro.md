@@ -39,7 +39,7 @@ Sequência | Representação
 
 - **Comentários**
 
-Tudo que estiver entre \* e *\ é ignorado pelo compilador (ou após \\ numa linha única).
+Tudo que estiver entre /* e */ é ignorado pelo compilador (ou após // numa linha única).
 
 - **Variáveis**
 
