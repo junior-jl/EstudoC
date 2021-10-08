@@ -70,13 +70,13 @@ O código abaixo imprime uma tabela de valores de temperatura Fahrenheit (de 0 a
 #include <stdio.h>
 main(){
     int fahr, celsius;
-    int inferior,superior,passo;
+    int inferior, superior, passo;
     inferior = 0;
     passo = 20;
     superior = 300;
     fahr = inferior;
     while (fahr <= superior){
-        celsius = 5*(fahr - 32)/9;
+        celsius = 5 * (fahr - 32) / 9;
         printf("%d\t%d\n", fahr, celsius);
         fahr = fahr + passo;
     }
@@ -111,6 +111,34 @@ No caso do programa-exemplo, não há _statement_ posterior ao **_while_**, ent�
 O corpo de um laço _**while**_ pode consistir de uma ou mais declarações fechadas por chaves ou uma única declaração sem a necessidade das chaves, isto é,
 
 ```c
-  while(i>j)
+  while (i > j)
     i = j + 2;
 ```
+
+Nota-se que tanto no exemplo da temperatura quanto no anterior, os _statements_ dentro do laço são indentados (são inseridos espaços entre a margem e o início da linha, geralmente com um TAB do teclado). A indentação é importante para enfatizar a sequência lógica do programa, mostrando o que está dentro do _loop_. Além disso, é recomendado
+utilizar espaços entre operadores e fazer apenas um _statement_ por linha para melhor leitura do código.
+
+Voltando ao código da conversão Fahrenheit-Celsius, a maior parte do trabalho é feita dentro do _**while**_. A computação e atribuição (_assignment_) de valor à variável **celsius** é feita pela linha de código
+
+```c
+celsius = 5 * (fahr - 32) / 9;
+```
+
+A fórmula para conversão é 
+
+![CodeCogsEqn](https://user-images.githubusercontent.com/69206952/136630550-b8dc6b88-83cd-42a6-ab0b-2426baa8fc61.png)
+
+No entanto, ao invés de multiplicar **(fahr - 32)** por 5/9, a multiplicação por 5 foi feita antes, pois, em C, a divisão de inteiros é truncada, isto é, qualquer parte fracionária
+é descartada, assim o resultado de 5/9 seria zero, resultando na variável **celsius** sempre nula. 
+
+- **printf**
+
+Além disso, nesse exemplo também pode-se aprender mais sobre o funcionamento da função **printf**. O primeiro argumento dessa função sempre é a _string_ de caracteres a ser mostrada na saída, onde cada símbolo (**%**) indica que um dos outros argumentos (segundo, terceiro, ...) será substituído e em qual forma deverá ser impresso. Por exemplo, %d especifica um argumento do tipo inteiro.  
+
+```c
+ printf("%d\t%d\n", fahr, celsius);
+```
+
+Assim, a linha acima imprime na tela o valor dos dois inteiros **fahr** e **celsius** separados por um TAB (\t) e uma nova linha (\n) no final.
+
+Cada termo com % é pareada com o segundo argumento, terceiro... Dessa forma, é necessário que o número (e tipo) de termos com %d na _string_ e o dos outros argumentos seja o mesmo para que não haja erros.
