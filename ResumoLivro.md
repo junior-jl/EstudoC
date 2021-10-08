@@ -175,3 +175,20 @@ são de ponto flutuante, permitindo a divisão sem truncamento.
 Deve-se notar que caso um operador matemático possua operandos inteiros, o resultado será inteiro. No entanto, se um dos operandos for **_float_** e o outro **int**, o resultado
 é automaticamente convertido em **_float_**. Assim, caso fosse escrito **fahr - 32** ao invés de **fahr - 32.0**, o resultado seria convertido para ponto flutuante. Porém, para 
 melhor leitura, é interessante indicar o ponto decimal. De mesmo modo, o teste **fahr <= superior** e a atribuição **fahr = inferior** ocorrem naturalmente (a variável do tipo **int** é convertida em **_float_** antes da operação.
+
+A especificação **3.0f** no **printf** diz que um número de ponto flutuante (**fahr**) deve ser imprimido com largura de pelo menos 3 caracteres e nenhum ponto decimal e dígito fracionário. Já **%6.1f** indica que **celsius** é um número de ponto flutuante que deve ser impresso com largura mínima de 6 caracteres e 1 dígito após o ponto decimal. Na especificação do que deve ser impresso, a largura e o número de dígitos decimais podem ser omitidos. Assim, algumas opções são mostradas a seguir.
+
+- %d : imprime um inteiro decimal;
+- %6d : imprime um inteiro decimal com largura de pelo menos 6 caracteres;
+- %f : imprime como ponto flutuante;
+- %6f : imprime como ponto flutuante e largura de pelo menos 6 caracteres;
+- %.2f : imprime como ponto flutuante e duas casas após o ponto decimal;
+- %6.2f : imprime como ponto flutuante, largura de pelo menos 6 caracteres e duas casas após o ponto decimal.
+
+Além disso, a função **printf** também reconhece:
+
+- %o : octal;
+- %x : hexadecimal;
+- %c : caractere;
+- %s : string de caracteres;
+- %% : símbolo de %.
