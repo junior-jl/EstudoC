@@ -682,4 +682,6 @@ Algumas funções são usadas apenas pelo seu efeito e não retornam nenhum valo
 
 ![image](https://user-images.githubusercontent.com/69206952/136675756-a21782cf-f670-48e0-ab4a-dcf06e86ea1e.png)
 
-O formato 
+O formato **%s** em **printf** espera como argumento correspondente uma _string_ representada dessa forma. **copy** também utiliza este fato e copia este caractere para o argumento de saída. 
+
+Analisando os limites, é impossível ao usuário de **getline** saber antecipadamente quão grande uma entrada pode ser, assim **getline** faz uma checagem de **_overflow_** (transbordamento).
