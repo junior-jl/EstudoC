@@ -1,7 +1,7 @@
 # The C Programming Language - Ritchie and Kernighan (2nd edition)
 ## Chapter 1 - A Tutorial Introduction
 
-- **Função main**
+### Função main
 
 Todo programa em C precisa de uma função **main**. A execução do programa começa nesta função. **main** geralmente chama funções previamente escritas pelo usuário ou de bibliotecas. 
 Em vários programas escritos em C, a primeira linha será **#include <stdio.h>**, que diz ao compilador para incluir as informações da biblioteca "standard input/output". O programa inicial no
@@ -15,7 +15,7 @@ main(){
 }
 ```
 
-- **Funções, parâmetros e declarações**
+### Funções, parâmetros e declarações
 
 A fim de comunicar dados entre funções, pode-se fornecer uma lista de **argumentos (parâmetros)**. Essa lista é escrita dentro dos parênteses após o nome da função. 
 Ainda, entre as chaves, estão os _statements_ (declarações).
@@ -25,7 +25,7 @@ após isso, o argumento "Hello, world\n".
 
 **printf** é uma função de biblioteca que imprime saída, neste caso, a sequência entre aspas duplas, chamada _character string_ ou _string constant_. 
 
-- **Sequências de escape**
+### Sequências de escape
 
 O \n é uma **sequência de escape**, isto é, uma sequência de caracteres (dentro de uma _string_) que representa outro caractere ou sequência de caracteres. Abaixo, tem-se uma lista de algumas sequências de escape utilizadas em C (todas iniciam com o \).
 
@@ -37,11 +37,11 @@ Sequência | Representação
 \v | vertical tab
 \" | double quotation mark (")
 
-- **Comentários**
+### Comentários
 
 Tudo que estiver entre /* e */ é ignorado pelo compilador (ou após // numa linha única).
 
-- **Variáveis**
+### Variáveis
 
 Em C, todas as variáveis devem ser declaradas antes de serem usadas. Uma declaração consiste no tipo e nome da variável, por exemplo,
 
@@ -98,7 +98,7 @@ fahr = inferior;
 
 _Statements_ individuais são terminados por ";" (_semicolon_ - ponto e vírgula).
 
-- **Laço de repetição _while_**
+### Laço de repetição _while_
 
 Como cada linha da tabela é computada de maneira similar, foi utilizado um _loop_ (laço de repetição). O _loop **while**_ funciona da seguinte forma:
 
@@ -131,7 +131,7 @@ A fórmula para conversão é
 No entanto, ao invés de multiplicar **(fahr - 32)** por 5/9, a multiplicação por 5 foi feita antes, pois, em C, a divisão de inteiros é truncada, isto é, qualquer parte fracionária
 é descartada, assim o resultado de 5/9 seria zero, resultando na variável **celsius** sempre nula. 
 
-- **printf**
+### printf
 
 Além disso, nesse exemplo também pode-se aprender mais sobre o funcionamento da função **printf**. O primeiro argumento dessa função sempre é a _string_ de caracteres a ser mostrada na saída, onde cada símbolo (**%**) indica que um dos outros argumentos (segundo, terceiro, ...) será substituído e em qual forma deverá ser impresso. Por exemplo, %d especifica um argumento do tipo inteiro.  
 
@@ -143,7 +143,7 @@ Assim, a linha acima imprime na tela o valor dos dois inteiros **fahr** e **cels
 
 Cada termo com % é pareada com o segundo argumento, terceiro... Dessa forma, é necessário que o número (e tipo) de termos com %d na _string_ e o dos outros argumentos seja o mesmo para que não haja erros.
 
-- **float**
+### float
 
 O programa de conversão de temperatura pode ser melhorado declarando as temperaturas como **float** ao invés de **int**. Assim, uma segunda versão do problema é mostrada abaixo:
 
@@ -192,3 +192,4 @@ Além disso, a função **printf** também reconhece:
 - %c : caractere;
 - %s : string de caracteres;
 - %% : símbolo de %.
+
