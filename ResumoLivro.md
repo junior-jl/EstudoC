@@ -443,3 +443,57 @@ else
 Somente um dos statements do _if-else_ é executado. Se **expression** é verdadeira, o _statement1_ é executado, se é falsa, o _statement2_ é executado.
 
 Cada _statement_ pode ser uma expressão única ou várias entre chaves. No programa de contagem de palavras, o _statement_ depois do else é um **if** que controla outros dois _statements_ (o que é geralmente dito um **else if**).
+
+### Arrays
+
+Ao criar um programa para contar o número de ocorrências de cada dígito, de cada caractere de espaço em branco e de todos os outros, pode-se ilustrar vários aspectos de C em um programa.
+
+Há doze categorias de entrada, então, é conveniente utilizar um _**array**_ para conter as ocorrências de cada dígito, ao invés de variáveis individuais. Abaixo, uma versão do programa:
+
+```c
+#include <stdio.h>
+
+main() {
+  int c, i, nwhite, nother;
+  int ndigit[10];
+
+  nwhite = nother = 0;
+  for (i = 0; i < 10; ++i)
+    ndigit[i] = 0;
+  while ((c = getchar()) != EOF)
+    if (c >= '0' && c <= '9')
+      ++ndigit[c-'0'];
+    else if (c == ' ' || c == '\n' || c == '\t')
+      ++nwhite;
+    else
+      ++nother;
+
+  printf("digits =");
+  for (i = 0; i < 10; ++i)
+    printf(" %d", ndigit[i]);
+  printf(", white space = %d, other = %d\n",
+    nwhite, nother);
+
+}
+```
+
+![image](https://user-images.githubusercontent.com/69206952/136673121-9df104d5-4ccc-45d0-85dc-30f62441426f.png)
+
+A linha de código 
+
+```c
+  int ndigit[10];
+```
+
+declara **ndigit** como um _array_ (vetor) de 10 inteiros. O subscrito de um _array_ sempre começa com 0 em C, então seus elementos são **ndigit[0], ndigit[1], ... ndigit[9]**. O subscrito pode ser qualquer expressão inteira, como a variável inteira **i** no exemplo. 
+
+Este programa em particular utiliza propriedades da representação **char** dos dígitos. Por exemplo, o teste 
+
+```c
+  if (c >= '0' && c <= '9') ...
+```
+
+determina se o caractere em **c** é um dígito. Se sim, seu valor numérico é **c - '0'**. Isso funciona pois '0', '1', ..., '9' tem valores consecutivos crescentes. Além disso, na tabela ASCII, o valor de '0' é 48. Dessa forma, **c - '0' = c - 48**, assim, quando c, for '1' (ASCII - 49), por exemplo, **c - 48 = 1**.
+
+
+
