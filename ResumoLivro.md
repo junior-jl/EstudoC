@@ -575,3 +575,45 @@ antes de **main** indica que **power** é uma função que espera dois argumento
   int power(int, int);
 ```
 
+### Arguments - Call by Value
+
+Em C, os argumentos de funções são passados "por valor", isto é, a função recebe o valor em variáveis temporárias, não nas originais. Assim, a função chamada não pode alterar diretamente uma variável na função que a chamou, somente a cópia privada, temporária.
+
+O código a seguir é uma versão de **power** que utiliza essa propriedade.
+
+```c
+  int power(int base, int n){
+    int p;
+    
+    for (p = 1; n > 0; --n)
+      p = p * base;
+    return p;
+  
+  }
+```
+
+O parâmetro **n** é usado como uma variável temporária, eliminando a variável **i**. O que quer que seja feito com a variável **n** dentro de **power** não tem efeito no argumento com o qual **power** foi originalmente chamada. 
+
+Com vetores, é diferente. Quando o nome de um _array_ é utilizado como argumento, o valor passado à função é a localização (ou endereço) do começo do vetor - não há cópia dos elementos do vetor. Assim, a função tem acesso e pode alterar qualquer elemento do _array_, como é discutido na próxima seção.
+
+### Character Arrays
+
+O tipo mais comum de _array_ em C é o de caracteres. Para ilustrar o uso de _character arrays_ e função que os manipulam, escrevemos um programa que lê um conjunto de linhas de texto e imprime a mais longa. Assim, o algoritmo seria
+
+```
+  while (existe outra linha)
+    if (é maior do que a linha anterior)
+      salva a linha
+      salva o seu tamanho
+  imprime a maior linha
+```
+
+O programa se divide em partes:
+
+1. Receber uma nova linha;
+2. Testar a linha recebida;
+3. Salvar uma linha;
+4. Controlar o processo.
+
+Assim, vamos escrever uma função separada **getline** para buscar a próxima linha de entrada. Quando uma das linhas encontradas for maior que a maior anterior, deve ser salva em algum lugar, sugerindo uma segunda função **copy** para copiá-la para um local seguro. E deve-se ter um programa principal (main) para controlar as funções. Assim,
+
