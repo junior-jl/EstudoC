@@ -25,7 +25,7 @@ após isso, o argumento "Hello, world\n".
 
 **printf** é uma função de biblioteca que imprime saída, neste caso, a sequência entre aspas duplas, chamada _character string_ ou _string constant_. 
 
-### Sequências de escape
+#### Sequências de escape
 
 O \n é uma **sequência de escape**, isto é, uma sequência de caracteres (dentro de uma _string_) que representa outro caractere ou sequência de caracteres. Abaixo, tem-se uma lista de algumas sequências de escape utilizadas em C (todas iniciam com o \).
 
@@ -131,7 +131,7 @@ A fórmula para conversão é
 No entanto, ao invés de multiplicar **(fahr - 32)** por 5/9, a multiplicação por 5 foi feita antes, pois, em C, a divisão de inteiros é truncada, isto é, qualquer parte fracionária
 é descartada, assim o resultado de 5/9 seria zero, resultando na variável **celsius** sempre nula. 
 
-### printf
+#### printf
 
 Além disso, nesse exemplo também pode-se aprender mais sobre o funcionamento da função **printf**. O primeiro argumento dessa função sempre é a _string_ de caracteres a ser mostrada na saída, onde cada símbolo (**%**) indica que um dos outros argumentos (segundo, terceiro, ...) será substituído e em qual forma deverá ser impresso. Por exemplo, %d especifica um argumento do tipo inteiro.  
 
@@ -143,7 +143,7 @@ Assim, a linha acima imprime na tela o valor dos dois inteiros **fahr** e **cels
 
 Cada termo com % é pareada com o segundo argumento, terceiro... Dessa forma, é necessário que o número (e tipo) de termos com %d na _string_ e o dos outros argumentos seja o mesmo para que não haja erros.
 
-### float
+#### float
 
 O programa de conversão de temperatura pode ser melhorado declarando as temperaturas como **float** ao invés de **int**. Assim, uma segunda versão do problema é mostrada abaixo:
 
@@ -314,7 +314,7 @@ c = (getchar() != EOF)
 
 O que causaria um efeito indesejado no código, atribuindo a **c** o valor de 0 ou 1.
 
-- **Contagem de caracteres**
+#### Contagem de caracteres
 
 O programa a seguir conta caracteres.
 
@@ -356,7 +356,7 @@ O corpo desse _loop **for**_ é vazio, pois todo o trabalho de teste e increment
 
 Uma das principais vantagens dos _loops **while**_ e **_for_** é que o teste é feito antes de entrar no corpo do laço, dessa forma, os programas funcionam bem caso haja uma entrada nula.
 
-- **Contagem de linhas**
+#### Contagem de linhas
 
 O programa a seguir conta linhas da entrada.
 
@@ -379,7 +379,7 @@ O duplo sinal de igualdade **==** é a notação em C para **é igual a**. Esse 
 
 Um caractere escrito entre aspas simples representa um valor inteiro igual ao valor numérico do caractere na máquina. Isso é chamado de _character constant_. Por exemplo, 'A' é uma constante de caractere; na tabela ASCII, seu valor é 65, a representação interna no caractere A. Da mesma forma, a sequência de escape '\n' representa o valor do caractere **_newline_**, que é 10 em ASCII.
 
-- **Contador de palavras**
+#### Contador de palavras
 
 Por fim, define-se uma palavra como uma sequência de caracteres que não contém um _blank_, um tab ou um _newline_. Assim, o programa a seguir é um contador de palavras, linhas e caracteres.
 
