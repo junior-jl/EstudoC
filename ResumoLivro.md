@@ -234,3 +234,47 @@ Assim, qualquer ocorrência de **name** (não estando entre aspas ou parte de ou
 ```
 
 É costumeiro escrever o nome das constantes em letras maiúsculas para diferenciá-las de variáveis. Além disso, deve-se notar que não há ponto e vírgula no fim de uma linha **#define**.
+
+### Character Input and Output
+
+O modelo de entrada e saída suportado pela biblioteca padrão é muito simples. Entrada ou saída de texto, independente de sua origem ou de para onde vai, é lidada como _streams_ de caracteres. Uma _text stream_ é uma sequência de caracteres dividida em linhas; cada linha consiste de zero ou mais caracteres seguidas por um _newline character_ (\n).
+
+A biblioteca padrão fornece diversas funções para leitura e escrita de um caractere por vez, das quais **getchar** e **putchar** são as mais simples. Cada vez que é chamada, a função **getchar** lê a próxima entrada de caractere de uma _text stream_ e a retorna. Assim, após
+
+```c
+c = getchar();
+```
+
+a variável **c** contém o próximo caractere da entrada (entradas são discutidas com mais ênfase no capítulo 7).
+
+Já a função **putchar** imprime um **char** toda vez que é chamada. Logo,
+
+```c
+putchar(c);
+```
+
+imprime o conteúdo da variável inteira **c** como um caractere, usualmente na tela.
+
+O código a seguir copia a entrada para a saída um caractere por vez.
+
+```c
+
+main() {
+
+    int c;
+
+    c = getchar();
+    while (c != EOF) {
+        putchar(c);
+        c = getchar();
+    }
+
+}
+
+```
+
+O operador relacional != significa "não é igual a".
+
+O que aparente ser um caractere no teclado ou na tela é, como todas as outras coisas, armazenado internamente como um padrão de bits. O tipo **char** é especificamente feito para armazenar tais dados, mas o tipo **int** pode ser usado, e, neste caso, foi utilizado por uma razão importante.
+
+O problema é distinguir o final da entrada de um dado válido. A solução é que **getchar** retorna um valor característico quando não há mais entrada, um valor que não pode ser confundido com qualquer caractere real. Tal valor é chamado **EOF** (end of file - fim do arquivo). Logo, deve-se declarar **c** como um tipo grande suficiente para armazenar qualquer valor que **getchar** retorne. Não se pode usar **char** já que **c** deve ser grande o suficiente para conter **EOF** em adição a qualquer **char** possível. Assim, usa-se **int**. (**EOF** é um inteiro definido em **<stdio.h>**)
