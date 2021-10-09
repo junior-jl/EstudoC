@@ -617,3 +617,69 @@ O programa se divide em partes:
 
 Assim, vamos escrever uma função separada **getline** para buscar a próxima linha de entrada. Quando uma das linhas encontradas for maior que a maior anterior, deve ser salva em algum lugar, sugerindo uma segunda função **copy** para copiá-la para um local seguro. E deve-se ter um programa principal (main) para controlar as funções. Assim,
 
+```c
+#include <stdio.h>
+#define MAXLINE 1000
+
+int getline(char line[], int maxline);
+void copy(char to[], char from[]);
+
+main(){
+
+    int len; // tamanho da linha atual
+    int max; // tamanho máximo até o momento
+    char line[MAXLINE]; // linha atual
+    char longest[MAXLINE]; // linha maior atualmente
+
+    max = 0;
+    while ((len = getline(line, MAXLINE)) > 0 )
+        if (len > max){
+            max = len;
+            copy(longest, line);
+        }
+    if (max > 0)
+        printf("%s", longest);
+    return 0;
+}
+
+int getline(char s[], int lim)
+{
+    int c, i;
+
+    for (i = 0; i < lim - 1 && (c = getchar()) != EOF && c != '\n'; ++i)
+        s[i] = c;
+    if (c == '\n'){
+        s[i] = c;
+        ++i;
+    }
+    s[i] = '\0';
+    return i;
+
+}
+
+void copy(char to[], char from[])
+{
+    int i;
+
+    i = 0;
+    while ((to[i] = from[i]) != '\0')
+        ++i;
+}
+
+```
+
+As funções **getline** e **copy** são declaradas no início do programa. **main** e **getline** se comunicam por meio de um par de argumentos e um valor retornado. Em **getline**, os argumentos são declarados na linha
+
+```c
+  int getline(char s[], int lim)
+```
+
+a qual especifica que o argumento **s** é um vetor e **lim** é um inteiro. O comprimento do vetor **s** não é necessário em **getline**, pois seu tamanho é estabelecido em **main**. Essa linha também mostra que **getline** retorna um **int**; como **int** é o tipo padrão de retorno, pode ser omitido.
+
+Algumas funções são usadas apenas pelo seu efeito e não retornam nenhum valor. O tipo de retorno de **copy** é **void**, significando que esta não retorna nenhum valor. 
+
+**getline** coloca o caractere '\0' (_**null character**_) no final do _array_ que está criando para marcar o final da _string_ de caracteres. Essa convenção é utilizada em C, isto é, quando uma _string_ constante como **"hello\n"** aparece em um programa escrito em C, é armazenada como um vetor de caracteres contendo os caracteres da string terminados por um '\0' para marcar o final, como mostra a figura abaixo.
+
+![image](https://user-images.githubusercontent.com/69206952/136675756-a21782cf-f670-48e0-ab4a-dcf06e86ea1e.png)
+
+O formato 
