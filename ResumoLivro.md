@@ -193,3 +193,44 @@ Além disso, a função **printf** também reconhece:
 - %s : string de caracteres;
 - %% : símbolo de %.
 
+### The For Statement
+
+Há diversas maneiras de escrever o mesmo programa. Uma variação do programa de conversão de temperatura é mostrada a seguir
+
+```c
+main() {
+  int fahr;
+  
+  for (fahr = 0; fahr <= 300; fahr = fahr + 20)
+    printf("%3d %6.1f\n", fahr, (5.0/9.0)*(fahr - 32));
+
+}
+```
+
+Esse código produz o mesmo resultado. Uma das principais mudanças é a eliminação da maioria das variáveis.
+
+O _statement **for**_ é um loop, uma generalização do _**while**_. Dentro dos parênteses do **_for_**, há três partes, separadas por ponto e vírgula.
+
+1. A inicialização **fahr = 0**: é feita uma vez antes do programa entrar no _loop_.
+2. O teste ou condição **fahr <= 300**: caso a condição seja verdadeira, o corpo do _loop_ é percorrido.
+3. A expressão de iteração **fahr = fahr + 20**: após este incremento, a condição é reavaliada para o programa entrar ou não novamente no laço.
+
+O _loop_ encerra caso a condição torne-se falsa. Da mesma forma do _while_, o corpo do laço de repetição pode ser uma linha única com um _statement_ ou vários _statements_ fechados por chaves.
+
+### Symbolic Constants
+
+Uma boa prática é definir certos números que são usados muitas vezes no código como uma constante, tornando o programa mais simples de ler e mais fácil de mudar quando necessário. Assim, um comando **#define** define um nome simbólico ou uma _symbolic constant_ como uma string de caracteres. Isto é, 
+
+```c
+#define    name    replacement text
+```
+
+Assim, qualquer ocorrência de **name** (não estando entre aspas ou parte de outro nome) será substituído por **replacement text**. O **name** tem a mesma forma do nome de uma variável, uma sequência de letras começando com uma letra. O **replacement text** pode ser composto por qualquer sequência de caracteres, não sendo limitado a números. Desse modo, no exemplo da temperatura, poderia-se criar as constantes a seguir:
+
+```c
+#define SUPERIOR 300
+#define INFERIOR 0
+#define PASSO 20
+```
+
+É costumeiro escrever o nome das constantes em letras maiúsculas para diferenciá-las de variáveis. Além disso, deve-se notar que não há ponto e vírgula no fim de uma linha **#define**.
