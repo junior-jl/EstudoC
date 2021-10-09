@@ -495,5 +495,83 @@ Este programa em particular utiliza propriedades da representação **char** dos
 
 determina se o caractere em **c** é um dígito. Se sim, seu valor numérico é **c - '0'**. Isso funciona pois '0', '1', ..., '9' tem valores consecutivos crescentes. Além disso, na tabela ASCII, o valor de '0' é 48. Dessa forma, **c - '0' = c - 48**, assim, quando c, for '1' (ASCII - 49), por exemplo, **c - 48 = 1**.
 
+### Funções
 
+Uma função fornece um modo conveniente de encapsular alguma computação que pode ser usada posteriormente sem preocupar-se com sua implementação. Até o momento só foram usadas funções disponibilizadas por bibliotecas, agora é o momento de escrever algumas. 
+
+A linguagem C não possui o operador de exponenciação, então vamos escrever uma função **power (m,n)** para elevar um inteiro **m** a um inteiro positivo **n**. Isto é, o valor de **power (3,2)** seria 9, por exemplo. (A biblioteca padrão contém a função **pow(x,y)** que computa x<sup>y</sup>).
+
+Assim, o seguinte código possui a função **power** e um programa **main** para executá-la.
+
+```c
+#include <stdio.h>
+
+int power(int m, int n);
+
+main(){
+  int i;
+  
+  for (i = 0; i < 10; ++i)
+    printf("%d %d %d\n", i, power(2,i), power(-3,i));
+  return 0;
+  
+}
+
+int power(int base, int n){
+  int i, p;
+  
+  p = 1;
+  for (i = 1; i <= n; ++i)
+    p = p * base;
+  return p;
+}
+```
+
+A definição de uma função tem a forma de:
+
+```
+tipo-de-retorno nome-da-função(declaração de parâmetros, caso haja){
+  declaracões
+  statements
+}
+```
+
+A definição de funções pode aparecer em qualquer ordem e ainda, num arquivo fonte único ou em vários, no entanto, nenhuma função pode ser dividida em vários arquivos. 
+
+A função **power** é chamada duas vezes pela **main** na linha
+
+```c
+  printf("%d %d %d\n", i, power(2,i), power(-3,i));
+```
+
+Cada chamada passa dois argumentos para **power**, que retorna um inteiro para ser formatado e imprimido.
+
+A primeira linha da função **power**
+
+```c
+  int power(int base, int n)
+```
+
+declara os nomes e tipos dos parâmetros e o tipo de resultado que a função retorna. Os nomes utilizados por **power** para seus parâmetros são locais a **power** e não são visíveis a outras funções, isto é, outras funções podem utilizar os mesmos nomes sem conflito algum. Pode-se observar, por exemplo que a variável **i** declarada dentro de **power** é completamente não relacionada a **i** declarada em **main**.
+
+O livro geralmente trata da seguinte forma:
+
+- Parâmetro: variável nomeada numa lista entre parênteses na definição de uma função;
+- Argumento: o valor usado na chamada da função.
+
+O valor que **power** computa é retornado a **main** pelo _statement_ **return**. Qualquer expressão pode seguir **return**. Não é necessário que uma função retorne um valor.
+
+No exemplo anterior, **main** retorna um valor. Já que **main** é uma função como qualquer outra, ela pode retornar um valor para quem a chama (neste caso, o ambiente que a executa). Tipicamente um retorno de valor nulo implica terminação normal. Valores diferentes de zero sinalizam terminação errônea ou incomum. Até o momento, os **return** de **main** estavam sendo omitidos, mas serão incluídos a partir de agora, como lembrete de que programas devem retornar status ao seu ambiente.
+
+A declaração
+
+```c
+  int power(int m, int n);
+```
+
+antes de **main** indica que **power** é uma função que espera dois argumentos **int** e retorna um **int**. Essa declaração, chamada de _function prototype_, deve concordar com a definição e utilização de **power**. No entanto, o nome dos parâmetros não precisa ser o mesmo. Na verdade, o nome dos parâmetros é opcional num _function prototype_, então poderia ser escrito como
+
+```c
+  int power(int, int);
+```
 
