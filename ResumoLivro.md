@@ -357,3 +357,89 @@ O corpo desse _loop **for**_ é vazio, pois todo o trabalho de teste e increment
 Uma das principais vantagens dos _loops **while**_ e **_for_** é que o teste é feito antes de entrar no corpo do laço, dessa forma, os programas funcionam bem caso haja uma entrada nula.
 
 - **Contagem de linhas**
+
+O programa a seguir conta linhas da entrada.
+
+```c
+#include <stdio.h>
+main(){
+  int c, nl;
+  
+  nl = 0;
+  while ((c = getchar()) != EOF)
+    if (c == '\n')
+      ++nl;
+  printf("%d\n", nl);
+}
+```
+
+Agora, o corpo do **_while_** consiste de um **_if_** que controla o incremento da variável **nl** (número de linhas). O _statement **if**_ testa a condição entre parênteses, sendo verdadeira, o(s) _statement(s)_ são executados.
+
+O duplo sinal de igualdade **==** é a notação em C para **é igual a**. Esse símbolo é utilizado para distinguir da igualdade simples **=** que é utilizada para atribuição de variáveis. 
+
+Um caractere escrito entre aspas simples representa um valor inteiro igual ao valor numérico do caractere na máquina. Isso é chamado de _character constant_. Por exemplo, 'A' é uma constante de caractere; na tabela ASCII, seu valor é 65, a representação interna no caractere A. Da mesma forma, a sequência de escape '\n' representa o valor do caractere **_newline_**, que é 10 em ASCII.
+
+- **Contador de palavras**
+
+Por fim, define-se uma palavra como uma sequência de caracteres que não contém um _blank_, um tab ou um _newline_. Assim, o programa a seguir é um contador de palavras, linhas e caracteres.
+
+```c
+#include <stdio.h>
+
+#define DENTRO 1
+#define FORA 0
+main(){
+    int c, nl, nw, nc, state;
+
+    state = FORA;
+    nl = nw = nc = 0;
+    while ((c = getchar()) != EOF){
+        ++nc;
+        if (c == '\n')
+            ++nl;
+        if (c == ' ' || c == '\n' || c == '\t')
+            state = FORA;
+        else if (state == FORA){
+            state = DENTRO;
+            ++nw;
+        }
+
+    }
+    printf("%d %d %d\n", nl, nw, nc);
+}
+```
+
+Cada vez que o programa encontra a primeira palavra de uma letra, conta mais uma palavra. A variável **state** grava se o programa está, no momento, em uma palavra ou não. A preferência por DENTRO e FORA a 1 e 0 se dá pela melhor leitura do programa. Em códigos simples como esses, a diferença é mínima, no entanto, em programas maiores, é bastante útil para clarificar a leitura.
+
+A linha 
+
+```c
+nl = nw = nc = 0;
+```
+
+atribui às três variáveis o valor 0. Isso não é um caso especial, mas uma consequência de que um _assignment_ é uma expressão com um valor e _assigments_ se associam da direita para a esquerda, portanto, a expressão acima equivale a esta:
+
+```c
+nl = (nw = (nc = 0));
+```
+
+O operador || significa OR (ou), logo, a linha de código
+
+```c
+  if (c == ' ' || c == '\n' || c == '\t')
+```
+
+pode ser lida como "se **c** é um _blank_ ou **c** é um _newline_ ou **c** é um tab". Há um operador correspondente && para o operador lógico AND (e), cuja precedência é maior do que a do OR. Expressões conectadas por && ou || são avaliadas da esquerda para a direita. É óbvio que neste caso se **c** for um _blank_, não é necessário testar as outras opções e o if realmente não as testa. No momento, não é algo particularmente importante, mas em situações mais complicadas, sim.
+
+Este exemplo também mostra um **_else_** que especifica uma ação alternativa se a condição do **if** for falsa. A forma geral é
+
+```c
+if (expression)
+  statement1
+else 
+  statement2
+```
+
+Somente um dos statements do _if-else_ é executado. Se **expression** é verdadeira, o _statement1_ é executado, se é falsa, o _statement2_ é executado.
+
+Cada _statement_ pode ser uma expressão única ou várias entre chaves. No programa de contagem de palavras, o _statement_ depois do else é um **if** que controla outros dois _statements_ (o que é geralmente dito um **else if**).
