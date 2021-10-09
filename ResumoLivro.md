@@ -277,4 +277,83 @@ O operador relacional != significa "não é igual a".
 
 O que aparente ser um caractere no teclado ou na tela é, como todas as outras coisas, armazenado internamente como um padrão de bits. O tipo **char** é especificamente feito para armazenar tais dados, mas o tipo **int** pode ser usado, e, neste caso, foi utilizado por uma razão importante.
 
-O problema é distinguir o final da entrada de um dado válido. A solução é que **getchar** retorna um valor característico quando não há mais entrada, um valor que não pode ser confundido com qualquer caractere real. Tal valor é chamado **EOF** (end of file - fim do arquivo). Logo, deve-se declarar **c** como um tipo grande suficiente para armazenar qualquer valor que **getchar** retorne. Não se pode usar **char** já que **c** deve ser grande o suficiente para conter **EOF** em adição a qualquer **char** possível. Assim, usa-se **int**. (**EOF** é um inteiro definido em **<stdio.h>**)
+O problema é distinguir o final da entrada de um dado válido. A solução é que **getchar** retorna um valor característico quando não há mais entrada, um valor que não pode ser confundido com qualquer caractere real. Tal valor é chamado **EOF** (end of file - fim do arquivo). Logo, deve-se declarar **c** como um tipo grande suficiente para armazenar qualquer valor que **getchar** retorne. Não se pode usar **char** já que **c** deve ser grande o suficiente para conter **EOF** em adição a qualquer **char** possível. Assim, usa-se **int**. (**EOF** é um inteiro definido em **<stdio.h>**).
+
+Em C, qualquer _assignment_, como
+
+```c
+c = getchar();
+```
+
+é uma expressão e tem um valor, que é o valor do primeiro membro depois do _assignment_. Isso significa que tal atribuição pode aparecer como parte de uma expressão maior. Assim, se for colocado dentro da parte de teste do _loop_ _**while**_, o programa fica escrito como:
+
+```c
+
+#include <stdio.h>
+main(){
+  int c;
+  
+  while ((c = getchar()) != EOF )
+    putchar(c);
+}
+```
+
+Assim, o **_while_** pega um caractere, atribui a **c** e então testa se esse caractere é o sinal EOF. Se não for, o corpo do laço é executado, imprimindo o **char** e o while se repete. Quando o fim do arquivo é finalmente alcançado, o **_while_** termina, e, neste caso, **main** também.
+
+Os parênteses ao redor do _assignment_ são necessários pois a precedência de != é maior do que a de =, o que significa que a ausência dos parênteses faria o teste (!=) antes do _assignment_ (=). Isto é, a atribuição
+
+```c
+c = getchar() != EOF
+```
+
+é equivalente a
+
+```c
+c = (getchar() != EOF)
+```
+
+O que causaria um efeito indesejado no código, atribuindo a **c** o valor de 0 ou 1.
+
+- **Contagem de caracteres**
+
+O programa a seguir conta caracteres.
+
+```c
+#include <stdio.h>
+
+main() {
+    long nc;
+    nc = 0;
+    while (getchar() != EOF) {
+        ++nc;
+    }
+    printf("%ld\n", nc); 
+}
+```
+
+Há um pequeno problema na compilação do código, no qual o compilador nunca sai do laço, pois não recebe o sinal EOF. No compilador que eu utilizo, o EOF é o comando CTRL+Z, em alguns que vi na internet, CTRL+D.
+
+O _statement_ **++nc;** apresenta um novo operador ++, que significa um incremento de 1. Seria o mesmo que escrever **nc = nc + 1**. Há um operador correspondente de decremento de 1 (**--**). Estes operadores podem ser sufixos ou prefixos e tem uma diferença sutil que será tratada no capítulo 2.
+
+A especificação de conversão **%ld** diz ao **printf** que o argumento correspondente é um **_long integer_**.
+
+Além do **long** (variável de pelo menos 32 bits), poderia-se lidar com números maiores ainda utilizando **double**. Mudando isso e trocando o _**while**_ por um _loop **for**_, tem-se:
+
+```c
+#include <stdio.h>
+
+main() {
+    double nc;
+    for (nc = 0; getchar() != EOF; ++nc)
+      ;
+    printf("%.0f\n", nc);
+}
+```
+
+Nota-se que o **printf** utiliza **%f** tanto para **_float_** quanto para **_double_**; Como já foi descrito, **%.0f** suprime o ponto decimal e a parte fracionária, que, neste caso, é zero.
+
+O corpo desse _loop **for**_ é vazio, pois todo o trabalho de teste e incremento é feito dentro dos parâmetros da função. No entanto, as regras gramaticais do C exigem um corpo para o **_for_**. Dessa forma, o ponto e vírgula isolado - chamado _**null statement**_ - é escrito para satisfazer tal exigência.
+
+Uma das principais vantagens dos _loops **while**_ e **_for_** é que o teste é feito antes de entrar no corpo do laço, dessa forma, os programas funcionam bem caso haja uma entrada nula.
+
+- **Contagem de linhas**
