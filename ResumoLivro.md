@@ -685,3 +685,28 @@ Algumas funções são usadas apenas pelo seu efeito e não retornam nenhum valo
 O formato **%s** em **printf** espera como argumento correspondente uma _string_ representada dessa forma. **copy** também utiliza este fato e copia este caractere para o argumento de saída. 
 
 Analisando os limites, é impossível ao usuário de **getline** saber antecipadamente quão grande uma entrada pode ser, assim **getline** faz uma checagem de **_overflow_** (transbordamento).
+
+### External Variables and Scope
+
+As variáveis criadas em **main**, como **line** e **longest** no exemplo anterior, são locais a **main**. Por serem declaradas dentro de **main**, nenhuma outra função pode ter acesso direto a elas. O mesmo é válido pra outras variáveis em outras funções. Cada variável local passa a existir somente quando a função é chamada e desaparece quando a função é encerrada. Essas variáveis são conhecidas como _automatic variables_. (No capítulo 4, é discutido a classe **static** na qual variáveis locais retém seus valores entre chamadas).
+
+Como uma alternativa, é possível definir variáveis que são **externas** a todas as funções, i.e., variáveis que podem ser acessadas por nome por qualquer função. Uma variável externa deve ser definida, exatamente uma vez, fora de qualquer função, alocando armazenamento para si.
+
+Antes de uma função poder utilizar uma variável externa, o nome da variável deve ser "apresentado" à função. Uma forma de fazer isso é escrever **extern** antes da declaração. Em algumas circunstâncias, esse termo pode ser omitido, caso a definição da variável externa ocorra no arquivo fonte antes do seu uso em uma função particular. Portanto, é prática comum colocar as definições de todas as variáveis externas no começo do arquivo fonte, omitindo todas as declarações **extern**.
+
+Caso o programa seja escrito em diversos arquivos e uma variável é definida no _arquivo1_ e utilizada em _arquivo2_ e _arquivo3_, deve haver declarações **extern** em _arquivo2_ e _arquivo3_. A prática mais usual é´coletar as declarações **extern** de variáveis e funções em um arquivo separado, historicamente chamado de _**header**_, que é incluido pela diretiva **#include** na frente de cada arquivo fonte. O sufixo **.h** é convencional para nomes de _header_. As funções da biblioteca padrão, por exemplo, são declaradas em _headers_ como **<stdio.h>**. (Esse tópico é discutido com mais profundidade no capítulo 4).
+
+- Uma prática interessante para compatibilidade com versões antigas de programas C é utilizar a palavra **void** quando uma lista de argumentos for vazia, isto é,
+
+```c
+int main(void) ...
+```
+
+Vale ressaltar que:
+
+- **Definição** de uma variável se refere ao momento em que a variável é criada ou é atribuido um armazenamento para tal;
+- **Declaração** de uma variável se refere ao momento no qual a natureza da variável é declarada, mas nenhum armazenamento é alocado.
+
+Por fim, é importante notar que depender apenas de variáveis externas pode parecer tentador, mas pode ocasionar problemas, pois as variáveis estarão lá mesmo quando não necessárias. A conexão de dados entre funções não é muito clara, pois variáveis podem ser modificadas em maneiras inesperadas e o programa torna-se difícil de mudar.
+
+O capítulo 1 do livro cobre o que pode ser chamado de núcleo convencional da linguagem C. É possível escrever programas úteis de tamanho considerável com os blocos construtores aprendidos aqui.
