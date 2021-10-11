@@ -1,6 +1,10 @@
 # The C Programming Language - Ritchie and Kernighan (2nd edition)
 ## Chapter 2 - Types, Operators, and Expressions
 
+<div align="justify">
+ 
+
+
 Variáveis e constantes são os objetos de dados básicos manipulados em um programa.
 
 Declarações listam as variáveis que seram usadas, seus tipos e talvez seus valores iniciais.
@@ -131,3 +135,5 @@ As aspas não fazem parte da _string_, servem apenas para delimitá-la. As mesma
 Esse fato é útil quando é necessário separar _strings_ longas em várias linhas fonte.
 
 Tecnicamente, uma _string constant_ é um vetor de caracteres. A representação interna de uma _string_ possui um caractere nulo '\0' no final, assim, o armazenamento físico necessário é o número de caracteres escrito entre aspas mais um. Essa representação significa que não há limite para o comprimento de uma _string_, mas programas podem percorrer uma _string_ completamente para determinar seu tamanho. A função **strlen(s)** da biblioteca padrão **<string.h>**  retorna o comprimento de seu argumento **s** (uma _character string_) excluindo o '\0' terminal.
+
+  </div>
