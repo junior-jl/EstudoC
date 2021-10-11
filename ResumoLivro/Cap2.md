@@ -136,4 +136,23 @@ Esse fato é útil quando é necessário separar _strings_ longas em várias lin
 
 Tecnicamente, uma _string constant_ é um vetor de caracteres. A representação interna de uma _string_ possui um caractere nulo '\0' no final, assim, o armazenamento físico necessário é o número de caracteres escrito entre aspas mais um. Essa representação significa que não há limite para o comprimento de uma _string_, mas programas podem percorrer uma _string_ completamente para determinar seu tamanho. A função **strlen(s)** da biblioteca padrão **<string.h>**  retorna o comprimento de seu argumento **s** (uma _character string_) excluindo o '\0' terminal.
 
+Assim, um programa que retorna o comprimento de uma string **s** é:
+ 
+ ```c
+ int strlen(char s[]){
+  int i;
+ 
+ i = 0;
+ while (s[i] != '\0')
+  ++i;
+ return i;
+ }
+ 
+ ```
+ 
+É importante distinguir entre uma _string_ e uma _character constant_ que possui um único caractere, isto é, 'x' não é o mesmo que "x". O primeiro é um inteiro, utilizado para produzir o valor numérico da letra **x** no conjunto de caracteres da máquina. O último é um vetor de caracteres que contém um único caractere (x) e um '\0'.
+ 
+Existe ainda outro tipo de constante, a _**enumeration constant**_
+ 
+ 
   </div>
