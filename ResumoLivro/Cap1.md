@@ -3,6 +3,10 @@
 
 ### Função main
 
+<div align="justify">
+  
+
+
 Todo programa em C precisa de uma função **main**. A execução do programa começa nesta função. **main** geralmente chama funções previamente escritas pelo usuário ou de bibliotecas. 
 Em vários programas escritos em C, a primeira linha será **#include <stdio.h>**, que diz ao compilador para incluir as informações da biblioteca "standard input/output". O programa inicial no
 estudo das linguagens de programação geralmente é escrever "Hello, world", em C, tem-se:
@@ -710,3 +714,5 @@ Vale ressaltar que:
 Por fim, é importante notar que depender apenas de variáveis externas pode parecer tentador, mas pode ocasionar problemas, pois as variáveis estarão lá mesmo quando não necessárias. A conexão de dados entre funções não é muito clara, pois variáveis podem ser modificadas em maneiras inesperadas e o programa torna-se difícil de mudar.
 
 O capítulo 1 do livro cobre o que pode ser chamado de núcleo convencional da linguagem C. É possível escrever programas úteis de tamanho considerável com os blocos construtores aprendidos aqui.
+
+  </div>
