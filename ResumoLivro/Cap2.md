@@ -217,7 +217,7 @@ Todos possuem precedência igual. Abaixo deles em termos de precedência estão 
  ==    !=
 ```
 
-Operadores relacionais possuem precedência menor do que operadores aritméticos, logo, uma expressão como **i < lim - 1 ** é equivalente a **i < (lim - 1) **.
+Operadores relacionais possuem precedência menor do que operadores aritméticos, logo, uma expressão como **i < lim - 1** é equivalente a **i < (lim - 1)**.
 
 Ainda há os operadores lógicos && e ||. Expressões conectadas por estes são avaliadas da esquerda para a direita, e a avaliação acaba assim que a veracidade ou falsidade da expressão é conhecida, como já mencionado no capítulo 1. A precedência de && é maior do que a de ||, e ambos possuem precedência menor do que operadores relacionais e de igualdade, assim, a expressão
 
