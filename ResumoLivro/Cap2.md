@@ -65,4 +65,32 @@ além de propriedades da máquina e compilador.
 
 ### Constants
 
-Uma constante 
+Uma constante inteira como 1234 é um **int**. Uma constante **long** é escrita com um **l** (éle) ou **L** no final, como 123456789L; um inteiro grande demais para ser acomodado num **int** é tomado como **long**. Constantes **unsigned** são escritas com um **u** ou **U** no final, e o sufixo **ul** ou **UL** indica **unsigned long**.
+
+Constantes de ponto flutante contém um ponto decimal (12.34), um expoente (1e-2), ou ambos; seu tipo é **double**, a não ser que seja sufixado. Os sufixos **f** ou **F** indicam uma constante **float**; **l** ou **L** indicam um **long double**.
+
+O valor de um inteiro pode ser especificado em octal ou hexadecimal, ao invés de decimal:
+
+- Um **0** (zero) no início de uma constante inteira significa octal.
+
+Por exemplo, 31 = 037;
+
+- Um **0X** no início indica hexadecimal.
+
+Por exemplo, 31 = 0X1F ou 0X1f.
+
+Constantes escritas em código octal ou hexadecimal também podem ser seguidas de **L** ou **U** para serem lidos como **long** ou **unsigned**, respectivamente. **0XFUL** é uma constante **unsigned long** com valor 15<sub>10</sub>.
+
+- **_Character constant_**: é um inteiro escrito como um caractere entre aspas simples. Seu valor é o valor numérico de tal caractere no conjunto de caracteres da máquina (geralmente o código ASCII). Por exemplo, a **_character constant_** '0' tem valor 48.
+
+Alguns caracteres podem ser representados por _string constants_ como as sequências de escape já mencionadas. Além disso, um padrão binário arbitrário de tamanho de um byte pode ser especificado como **'\ooo'** onde **ooo** representa um a três dígitos octais (0...7) ou por **'\xhh'** onde **hh** representa um ou mais dígitos hexadecimais (0...F). Dessa forma, pode-se escrever
+
+```c
+#define VTAB '\013' // Vertical Tab ASCII (octal)
+#define BELL '\077 // Caractere de sino ASCII (octal)
+#define VTAB '\xb' // Vertical Tab ASCII (hexadecimal)
+#define BELL '\x7' // Caractere de sino ASCII (hexadecimal)
+```
+
+A _character constant_ '\0' representa o caractere de valor zero (_null character_). É geralmente escrito como '\0' para enfatizar a natureza de caractere de alguma expressão, porém seu valor numérico é simplesmente 0.
+
