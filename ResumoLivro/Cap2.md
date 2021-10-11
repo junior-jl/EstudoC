@@ -188,3 +188,53 @@ Uma variável pode também ser iniciada na sua declaração. Se o nome é seguid
  float eps = 1.0e-5;
 ```
 
+Se a variável em questão não for automática (local), a inicialização é feita somente uma vez. Já uma variável automática é inicializada toda vez que a função ou bloco é adentrada. Variáveis externas e **static** são inicializadas em zero por padrão. Variáveis automáticas não inicializadas tem valor indefinido (lixo).
+
+O qualificador **const** pode ser aplicado a uma declaração de variável cujo valor não será mudado. No caso de um _array_, indica que seus elementos não serão alterados.
+
+```c
+ const double e = 2.71828182845905;
+ const char msg[] = "warning: ";
+```
+
+### Arithmetic Operators
+
+ Os operadores binários aritméticos são **+, -, \*, /** e o operador módulo **%**. Já que a divisão de inteiros trunca qualquer parte fracionária, a expressão **x % y** produz o resto da divisão de x por y, sendo zero quando a divisão for exata.
+ 
+ O operador **%** não pode ser aplicado a **float** ou **double**. Os operadores + e - tem a mesma precedência, que é inferior à precedência de \*, / e %, que por sua vez é inferior aos + e - unários (bit a bit). Operadores aritméticos são associados da esquerda para a direita.
+
+### Relational and Logical Operators
+
+Os operadores relacionais são:
+
+```c
+ >    >=    <    <=
+```
+
+Todos possuem precedência igual. Abaixo deles em termos de precedência estão os operadores de igualdade:
+
+```c
+ ==    !=
+```
+
+Operadores relacionais possuem precedência menor do que operadores aritméticos, logo, uma expressão como **i < lim - 1 ** é equivalente a **i < (lim - 1) **.
+
+Ainda há os operadores lógicos && e ||. Expressões conectadas por estes são avaliadas da esquerda para a direita, e a avaliação acaba assim que a veracidade ou falsidade da expressão é conhecida, como já mencionado no capítulo 1. A precedência de && é maior do que a de ||, e ambos possuem precedência menor do que operadores relacionais e de igualdade, assim, a expressão
+
+```c
+ i < lim - 1 && (c = getchar()) != '\n' && c != EOF
+```
+
+não necessita de parênteses adicionais. No entanto, como **!=** possui precedência maior do que o operador _assignment_ **=**, os parênteses são necessários em tal termo.
+
+Por definição, o valor numérico de uma expressão relacional ou lógica é 1 caso seja verdadeira e 0 caso seja falsa. O operador de negação unária **!** converte um operando não-nulo em 0 e um operando zero em 1. Um uso comum desse operador é em construções como
+
+```c
+ if (!valid)
+```
+
+ao invés de
+
+```c
+ if (valid == 0)
+```
