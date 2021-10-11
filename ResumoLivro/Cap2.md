@@ -86,11 +86,48 @@ Constantes escritas em código octal ou hexadecimal também podem ser seguidas d
 Alguns caracteres podem ser representados por _string constants_ como as sequências de escape já mencionadas. Além disso, um padrão binário arbitrário de tamanho de um byte pode ser especificado como **'\ooo'** onde **ooo** representa um a três dígitos octais (0...7) ou por **'\xhh'** onde **hh** representa um ou mais dígitos hexadecimais (0...F). Dessa forma, pode-se escrever
 
 ```c
-#define VTAB '\013' // Vertical Tab ASCII (octal)
-#define BELL '\077 // Caractere de sino ASCII (octal)
+#define VTAB '\013' // Vertical Tab ASCII 
+#define BELL '\077 // Caractere de sino ASCII 
+```
+
+```c
 #define VTAB '\xb' // Vertical Tab ASCII (hexadecimal)
 #define BELL '\x7' // Caractere de sino ASCII (hexadecimal)
 ```
 
 A _character constant_ '\0' representa o caractere de valor zero (_null character_). É geralmente escrito como '\0' para enfatizar a natureza de caractere de alguma expressão, porém seu valor numérico é simplesmente 0.
 
+Uma **_constant expression_** é uma expressão que envolve somente constantes. Tais expressões podem ser avaliadas durante a compilação ao invés de durante a execução, podendo ser utilizadas em qualquer lugar como uma constante, por exemplo
+
+```c
+#define MAXLINE 1000
+char line[MAXLINE + 1];
+```
+
+Uma **_string constant_** ou **_string literal_** é uma sequência de zero ou mais caracteres fechados por aspas duplas, como
+
+```c
+"Eu sou uma string"
+```
+
+ou 
+
+```c
+"" // a string vazia.
+```
+
+As aspas não fazem parte da _string_, servem apenas para delimitá-la. As mesmas sequências de escape utilizadas em caracteres servem para strings e **\"** representa o caractere da aspa dupla. Além disso, _string constants_ podem ser concatenadas, assim
+
+```c
+"Hello," " world"
+```
+
+é equivalente a 
+
+```c
+"Hello, world"
+```
+
+Esse fato é útil quando é necessário separar _strings_ longas em várias linhas fonte.
+
+Tecnicamente, uma _string constant_ é um vetor de caracteres. A representação interna de uma _string_ possui um caractere nulo '\0' no final, assim, o armazenamento físico necessário é o número de caracteres escrito entre aspas mais um. Essa representação significa que não há limite para o comprimento de uma _string_, mas programas podem percorrer uma _string_ completamente para determinar seu tamanho. A função **strlen(s)** da biblioteca padrão **<string.h>**  retorna o comprimento de seu argumento **s** (uma _character string_) excluindo o '\0' terminal.
