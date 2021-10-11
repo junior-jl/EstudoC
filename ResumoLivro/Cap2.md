@@ -168,3 +168,23 @@ enum escapes { BELL = '\a', BACKSPACE = '\b', TAB = '\t', NEWLINE = '\n', VTAB =
 enum months { JAN = 1, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC }; // FEB é 2, MAR é 3 ...
 ```
 
+### Declarations
+
+Todas as variáveis devem ser declaradas antes de seu uso, embora certas declarações possam ser feitas implicitamente pelo contexto. Uma declaração especifica um **tipo** e contém uma lista de uma ou mais variáveis daquele tipo, como em
+
+```c
+ int inferior, superior, passo;
+ char c, linha[1000];
+```
+
+As declarações acima poderiam ter sido escritas separadamente, tomando mais espaço no código, porém pode ser conveniente para comentários sobre tal variável e modificações posteriores.
+
+Uma variável pode também ser iniciada na sua declaração. Se o nome é seguido de um sinal de igualdade e uma expressão, a expressão serve como um inicializador, como por exemplo,
+
+```c
+ char esc = '\\';
+ int i = 0;
+ int limit = MAXLINE + 1;
+ float eps = 1.0e-5;
+```
+
