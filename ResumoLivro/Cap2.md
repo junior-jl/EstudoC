@@ -1,7 +1,7 @@
 # The C Programming Language - Ritchie and Kernighan (2nd edition)
 ## Chapter 2 - Types, Operators, and Expressions
 
-<div align="justify">
+
  
 
 
@@ -152,7 +152,19 @@ Assim, um programa que retorna o comprimento de uma string **s** é:
  
 É importante distinguir entre uma _string_ e uma _character constant_ que possui um único caractere, isto é, 'x' não é o mesmo que "x". O primeiro é um inteiro, utilizado para produzir o valor numérico da letra **x** no conjunto de caracteres da máquina. O último é um vetor de caracteres que contém um único caractere (x) e um '\0'.
  
-Existe ainda outro tipo de constante, a _**enumeration constant**_
+Existe ainda outro tipo de constante, a _**enumeration constant**_. Uma _enumeration_ é uma lista de valores de constantes inteiras, como por exemplo
  
+ ```c
+  enum boolean { NO, YES };
+ ```
  
-  </div>
+O primeiro nome em uma lista **enum** possui valor 0, o segundo 1, e assim sucessivamente, a não ser que os valores sejam especificados. Se nem todos os valores são especificados, os que não forem continuam a progressão do último valor especificado, como no segundo dos próximos exemplos.
+
+```c
+enum escapes { BELL = '\a', BACKSPACE = '\b', TAB = '\t', NEWLINE = '\n', VTAB = '\v', RETURN = '\r'};
+```
+
+```c
+enum months { JAN = 1, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC }; // FEB é 2, MAR é 3 ...
+```
+
