@@ -347,3 +347,45 @@ para uma forma mais compacta
   if (c == '\n')
     s[i++] = c;
 ```
+
+### Bitwise Operators
+
+A linguagem C fornece seis operadores para manipulação de bits; estes só podem ser aplicados a operandos inteiros, isto é, **char, short, int, long**, seja **signed** ou **unsigned**
+
+Operador | Descrição
+--- | ---
+& | bitwise AND
+\| | bitwise inclusive OR
+^ | bitwise exclusive OR
+<< | left shift
+\>> | right shift
+~ | complemento de um (unário)
+
+Um uso comum do **&** é mascarar um conjunto de bits, por exemplo
+
+```c
+  n = n & 0177;
+```
+
+seta a zero todos os bits, exceto os últimos 7 bits de **n**. (177<sub>8</sub> = 11111111<sub>2</sub>).
+
+O OR unário é utilizado para "ligar" bits:
+
+```c
+  x = x | SET_ON;
+```
+
+Essa linha de código seta para 1 todos os bits que são 1 em **SET_ON**, por exemplo, se **SET_ON = 1111**, os últimos quatro bits são "ligados", independente de seu valor atual.
+
+O operador unário OR (^) seta para um cada posição de bit na qual seus operandos possuem bits diferentes, e zero onde são iguais.
+
+Deve-se distinguir os operadores **_bitwise_** & e | dos operadores lógicos **&&** e **||**, que implicam avaliação (da esquerda para a direita) de uma verdade ou falsidade. Por exemplo,
+
+```c
+  x = 1; //(01)
+  y = 2; //(10)
+  a = x & y // a = 0... 0 AND 1 = 0, 1 AND 0 = 0
+  b = x && y // b = TRUE, pois 1(TRUE) AND 2(TRUE) = TRUE
+```
+
+Os operadores _shift_ << e >> performam _shifts_ (deslocamentos) para a esquerda e para a direita do operando à esquerda pelo número de posições (bits) dadas no operando à direita, que deve ser positivo. Portanto, **x << 2** desloca o valor de **x** para a esquerda em duas posições, preenchendo o que ficaria vazia com zeros. Um deslocamento à direita de um **unsigned** sempre preenche os bits vagos com zeros. No entanto, deslocamento à direita em **signeds** preenche com bits de sinal (_arithmetic shift_) em algumas máquinas e com zeros (_logical shift_) em outras.
