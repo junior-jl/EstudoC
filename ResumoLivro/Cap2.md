@@ -369,7 +369,7 @@ Um uso comum do **&** é mascarar um conjunto de bits, por exemplo
 
 seta a zero todos os bits, exceto os últimos 7 bits de **n**. (177<sub>8</sub> = 11111111<sub>2</sub>).
 
-O OR unário é utilizado para "ligar" bits:
+O OR _bitwise_ é utilizado para "ligar" bits:
 
 ```c
   x = x | SET_ON;
@@ -377,7 +377,7 @@ O OR unário é utilizado para "ligar" bits:
 
 Essa linha de código seta para 1 todos os bits que são 1 em **SET_ON**, por exemplo, se **SET_ON = 1111**, os últimos quatro bits são "ligados", independente de seu valor atual.
 
-O operador unário OR (^) seta para um cada posição de bit na qual seus operandos possuem bits diferentes, e zero onde são iguais.
+O operador de bit OR (^) seta para um cada posição de bit na qual seus operandos possuem bits diferentes, e zero onde são iguais.
 
 Deve-se distinguir os operadores **_bitwise_** & e | dos operadores lógicos **&&** e **||**, que implicam avaliação (da esquerda para a direita) de uma verdade ou falsidade. Por exemplo,
 
@@ -389,3 +389,11 @@ Deve-se distinguir os operadores **_bitwise_** & e | dos operadores lógicos **&
 ```
 
 Os operadores _shift_ << e >> performam _shifts_ (deslocamentos) para a esquerda e para a direita do operando à esquerda pelo número de posições (bits) dadas no operando à direita, que deve ser positivo. Portanto, **x << 2** desloca o valor de **x** para a esquerda em duas posições, preenchendo o que ficaria vazia com zeros. Um deslocamento à direita de um **unsigned** sempre preenche os bits vagos com zeros. No entanto, deslocamento à direita em **signeds** preenche com bits de sinal (_arithmetic shift_) em algumas máquinas e com zeros (_logical shift_) em outras.
+
+O operador unário ~ produz o complemento de um de um inteiro, i.e., converte cada bit 1 para 0 e vice-versa. Por exemplo,
+
+```c
+x = x & ~077 // 077 = 00111111
+```
+
+seta os últimos 6 bits de x para zero. Tal expressão é independente do tamanho da palavra, então, é preferível a **x & 0177700** (017700<sub>8</sub> = 1111111111000000<sub>2</sub>), assumindo que **x** é uma quantidade de 16 bits. Tal portabilidade não possui custo extra, já que ~077 é uma expressão constante que pode ser avaliada durante a compilação.
