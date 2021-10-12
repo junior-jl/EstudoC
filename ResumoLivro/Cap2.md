@@ -282,3 +282,48 @@ Conversões aritméticas implícitas funcionam como esperado. Em geral, se um op
 - Caso não, se qualquer um dos operandos é **float**, converte o outro para **float**;
 - Caso não, converte **char** e **short** para **int**;
 - Então, se qualquer operando é **long**, converte o outro para **long**.
+
+Geralmente, funções matemáticas como as que estão em **<math.h>** usarão precisão **long**. A principal razão para utilizar **float** é para poupar armazenamento em vetores grandes, ou, menos frequente, poupar tempo em máquinas nas quais aritmética com precisão dupla é particularmente caro.
+
+As regras de conversão são mais complicadas quando envolvem operandos **unsigned**, pois são dependentes da máquina, pois os tamanhos das variáveis mudam. Por exemplo, suponha que **int** possui 16 bits e **long** 32 bits. Nesse caso,
+
+- -1L < 1U, pois 1U, que é um **int**, é promovido a **signed long**;
+- -1L > 1UL, pois -1L é promovido a **unsigned long** e então aparece como um número positivo maior.
+
+Ainda, 
+
+- A conversão de **float** para **int** causa truncamento da parte fracionária;
+- Na conversão de **double** para **float**, se o valor será arredondado ou truncado depende da implementação.
+
+
+Um argumento de uma função é uma expressão, logo, conversões ocorrem quando os argumentos são passados às funções. Na ausência de um protótipo de função (a declaração no início), **char** e **short** tornam-se **int** e **float** é convertido em **double**. Por isso, até agora foram declarados argumentos de funções como **int** e **double** mesmo quando a função é chamada com **char** e **float**.
+
+#### Conversão explícita (cast)
+
+Conversões podem ser forçadas em qualquer expressão, com o operador unário chamado _**cast**_. Na construção
+
+```c
+ (**tipo**) expressão
+```
+
+a **expressão** é convertida para o tipo nomeado pelas regras mencionadas. O significado preciso do **cast** é como se a expressão fosse atribuída a uma variável do tipo especificado. Por exemplo, a rotina **sqrt** (da biblioteca **<math.h>** espera um argumento **double** e produz um resultado sem sentido caso não seja fornecido um valor de tal tipo. Logo, se **n** é um inteiro, pode-se fazer
+
+```c
+ sqrt((double) n)
+```
+
+para converter o valor de **n** para **double** ao passá-lo para **sqrt**. Note que o **_cast_** produz o valor de **n** no tipo apropriado, no entanto, a variável **n** não é alterada. O operador **_cast_** tem a mesma precedência alta de outros operadores unários, como será mostrado na tabela no final do capítulo.
+
+Argumentos geralmente são declarados no protótipo da função; tal declaração causa conversão automática de qualquer argumento quando a função for chamada. Por exemplo, dado o protótipo de **sqrt**:
+
+```c
+double sqrt(double);
+```
+
+a chamada
+
+```c
+raiz2 = sqrt(2);
+```
+
+automaticamente transforma o inteiro 2 no valor **double** 2.0 sem a necessidade de um **_cast_**.
