@@ -227,7 +227,7 @@ Ainda há os operadores lógicos && e ||. Expressões conectadas por estes são 
 
 não necessita de parênteses adicionais. No entanto, como **!=** possui precedência maior do que o operador _assignment_ **=**, os parênteses são necessários em tal termo.
 
-Por definição, o valor numérico de uma expressão relacional ou lógica é 1 caso seja verdadeira e 0 caso seja falsa. O operador de negação unária **!** converte um operando não-nulo em 0 e um operando zero em 1. Um uso comum desse operador é em construções como
+Por definição, o valor numérico de uma expressão relacional ou lógica é 1 caso seja verdadeira e 0 caso seja falsa. O operador de negação unária **!** converte um operando não-nulo em 0 e um operando zero em 1. Um uso comum desse operador é em construções como:
 
 ```c
  if (!valid)
@@ -238,3 +238,47 @@ ao invés de
 ```c
  if (valid == 0)
 ```
+
+### Type Conversions
+
+Quando um operador possui dois tipos diferentes de operando, eles são convertidos para um tipo comum de acordo com um pequeno número de regras. Em geral, as únicas conversões automáticas são as que convertem um operando "menor" em um "maior" sem perder informações, como converter um **int** em **float** numa expressão como **f + i**;
+
+- Expressões que não fazem sentido, como utilizar um **float** como subscrito de um vetor não são permitidas;
+- Expressões que podem perder informações, como atribuir um **long int** a um **short int**, podem levantar um alerta do compilador, mas não são ilegais;
+- Um **char** é apenas um inteiro pequeno, logo, podem ser utilizados livremente em expressões aritméticas. Esse tipo de conversão é útil em funções como a seguinte, que transforma caracteres maiúsculos em minúsculos.
+
+```c
+ int lower(int c)
+ {
+  if (c >= 'A' && c <= 'Z')
+   return c + 'a' - 'A';
+  else 
+   return c;
+ }
+```
+
+Vale ressaltar que o código funciona apenas para máquinas/compiladores que utilizem ASCII, caso utilizasse o conjunto EBCDIC, não funcionaria, porém poderia ser facilmente modificado.
+
+O _header_ padrão **<ctype.h>** define uma família de funções que fornece testes e conversões que são independentes do conjunto de caracteres. Por exemplo, a função **tolower(c)** retorna o valor em letras minúsculas de **c** se **c** for maiúsculo. Da mesma forma, o teste
+
+```c
+ c >= '0' && c <= '9'
+```
+
+poderia ser substituído por
+
+```c
+ isdigit(c)
+```
+
+Ainda sobre a conversão de **char** para **int**, há um certo ponto a ser discutido. C não especifica se variáveis do tipo **char** são **signed** ou **unsigned**, logo, quando um **char** é convertido em **int**, pode produzir um inteiro negativo? A resposta varia de máquina a máquina. Em algumas máquinas, um **char** cujo bit mais à esquerda seja 1 será convertido em um inteiro negativo. Em outras, um **char** é convertido em **int** adicionando zeros à sua esquerda, portanto, sempre será positivo.
+
+Por definição, o C garante que numa expressão, caracteres serão sempre positivos, no entanto, padrões binários arbitrários podem aparecer negativos em algumas máquinas e positivos em outras. Por conta disso, deve-se especificar **unsigned** ou **signed** se algum dado não-char vá ser armazenado em variáveis **char**.
+
+Conversões aritméticas implícitas funcionam como esperado. Em geral, se um operador como + ou \* (binário) tem operandos de tipos diferentes, o tipo "menor" é _promovido_ ao "maior" antes da operação ocorrer. O resultado é do tipo "maior". O apêndice A trata das regras de conversão de forma mais aprofundada. No entanto, se não existirem operandos **unsigned**, o seguinte conjunto de regras é suficiente:
+
+- Se qualquer um dos operandos é **long double**, converte o outro para **long double**;
+- Caso não, se qualquer um dos operandos é **double**, converte o outro para **double**;
+- Caso não, se qualquer um dos operandos é **float**, converte o outro para **float**;
+- Caso não, converte **char** e **short** para **int**;
+- Então, se qualquer operando é **long**, converte o outro para **long**.
