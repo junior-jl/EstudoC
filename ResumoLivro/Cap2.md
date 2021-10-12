@@ -397,3 +397,55 @@ x = x & ~077 // 077 = 00111111
 ```
 
 seta os últimos 6 bits de x para zero. Tal expressão é independente do tamanho da palavra, então, é preferível a **x & 0177700** (017700<sub>8</sub> = 1111111111000000<sub>2</sub>), assumindo que **x** é uma quantidade de 16 bits. Tal portabilidade não possui custo extra, já que ~077 é uma expressão constante que pode ser avaliada durante a compilação.
+
+### Assignment Operators and Expressions
+
+Expressões do tipo
+
+```c
+  i = i + 2;
+```
+
+podem ser escritas na forma comprimida
+
+```c
+  i += 2;
+```
+
+O operador **+=** é um **_assignment operator_**. A maioria dos operadores binários possuem um operador _assignment_ correspondente **op=**, onde **op** é um de
+
+```
+ +   -   *   /   %   <<   >>   &   ^   |
+```
+
+Se **expr1** e **expr2** são expressões, então
+
+```
+  expr1 op= expr2
+```
+
+é equivalente a
+
+```
+  expr1 = (expr1) op (expr2)
+```
+
+exceto que **expr1** só é computado uma vez. Note os parênteses ao em **expr2**:
+
+```c
+  x *= y + 1
+```
+
+significa 
+
+```c
+  x = x * (y + 1)
+```
+
+e não
+
+```c
+  x = x * y + 1
+```
+
+Por fim, em quaisquer expressões _assignment_, o tipo de tal _assignment_ é o tipo do operando à esquerda.
