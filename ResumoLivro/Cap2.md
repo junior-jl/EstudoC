@@ -324,3 +324,26 @@ raiz2 = sqrt(2);
 ```
 
 automaticamente transforma o inteiro 2 no valor **double** 2.0 sem a necessidade de um **_cast_**.
+
+### Increment and Decrement Operators
+
+  C fornece dois operadores para incrementar e decrementar variáveis. O operador incremento **++** adiciona um a seu operando, enquanto que o operador **--** subtrai 1. A parte inusitada é que tais operadores podem ser utilizados antes ou depois da variável.
+  
+  - A expressão **++n** incrementa **n** antes de seu valor ser utilizado;
+  - A expressão **n++** incrementa **n** após seu valor ser utilizado.
+
+Esses operadores só podem ser aplicados a variáveis, logo, uma expressão do tipo **(i + j)++** é ilegal. Com isso, pode-se modificar códigos como o seguinte:
+
+```c
+  if (c == '\n') {
+    s[i] = c;
+    ++i;
+  }
+```
+
+para uma forma mais compacta
+
+```c
+  if (c == '\n')
+    s[i++] = c;
+```
