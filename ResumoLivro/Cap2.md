@@ -1,7 +1,8 @@
 # The C Programming Language - Ritchie and Kernighan (2nd edition)
 ## Chapter 2 - Types, Operators, and Expressions
 
-
+<div align="justify">
+  
 Variáveis e constantes são os objetos de dados básicos manipulados em um programa.
 
 Declarações listam as variáveis que seram usadas, seus tipos e talvez seus valores iniciais.
@@ -526,3 +527,4 @@ pode produzir resultados diferentes em compiladores diferentes, dependendo se **
 
 Logo, conclui-se que escrever código que depende da ordem de avaliação é uma prática ruim de programação em qualquer linguagem. 
 
+</div>
