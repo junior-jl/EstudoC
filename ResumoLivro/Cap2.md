@@ -449,3 +449,80 @@ e não
 ```
 
 Por fim, em quaisquer expressões _assignment_, o tipo de tal _assignment_ é o tipo do operando à esquerda.
+
+### Conditional Expressions
+
+Os _statements_
+
+```c
+  if (a > b)
+    z = a;
+  else
+    z = b;
+```
+
+computam em **z** o máximo entre **a** e **b**. A _conditional expression_, escrita com o operador ternário **"?:"**, fornece um método alternativo para escrever isso e construções similares. Na expressão
+
+```c
+  expr1 ? expr2 : expr3
+```
+
+A expressão **expr1** é avaliada primeiro. Se é verdadeira, então **expr2** é avaliada, e este é o valor da _conditional expression_. Se não, **expr3** é avaliada e esse é o valor. Somente uma de **expr2** e **expr3** é avaliada. Dessa forma, passar a **z** o valor máximo entre **a** e **b** pode ser feito da seguinte forma:
+
+```c
+  z = (a > b) ? a : b; // z = max(a,b)
+```
+
+Se **expr2** e **expr3** são de tipos diferentes, o tipo do resultado é determinado pelas regras de conversão descritas anteriormente neste capítulo. Por exemplo, se **f** é um **float** e **n** um **int**, a expressão
+
+```c
+  (n > 0) ? f : n
+```
+
+é do tipo **float**, não importando se **n** é positivo. Parênteses não são necessários ao redor da primeira parte da expressão, tendo em vista que a precedência de ?: é muito baixa, somente acima do _assignment_. No entanto, são recomendados por questões de leitura de código.
+
+### Precedence and Order of Evaluation
+
+A tabela abaixo resume as regras de precedência e associatividade de todos os operadores, incluindo os que não foram discutidos ainda.
+
+Operadores | Associatividade
+---------- | ---------------
+( )       [ ]      ->       . | esquerda para direita 
+!      ~      ++      --      +      -      *     &     (**tipo**)    **sizeof** | direita para esquerda
+\*     /     % | esquerda para direita 
+\+       -    | esquerda para direita 
+<<      \>>   | esquerda para direita 
+<     <=      >     >= | esquerda para direita 
+==        != | esquerda para direita
+& | esquerda para direita
+^ | esquerda para direita
+\| |  esquerda para direita
+&& | esquerda para direita
+\|\| | esquerda para direita
+?: | direita para esquerda
+= += -= *= /= %= &= \^= \|= <<= >>= | direita para esquerda
+, | esquerda para direita
+
+Os operadores na mesma linha tem a mesma ordem de precedência; linha sestão em ordem decrescente de precedência. O **"operador"** () se refere a chamada de função. Os operadores -> e . são usados para acessar membros de estruturas e serão tratados no capítulo 6, assim como **sizeof**. O capítulo 5 discute * (direção por um ponteiro) e & (endereço de um objeto), e o capítulo 3 discute o operador vírgula.
+
+A linguagem C não especifica a ordem na qual os operandos de um operador são avaliados (com exceção de &&, ||, ?: e ,). Assim, num _statement_ como
+
+```c
+  x = f() + g();
+```
+
+**f** pode ser avaliado antes de **g** ou vice-versa; dessa forma, se **f** ou **g** alteram uma variável da qual a outra depende, **x** pode depender da ordem de avaliação. Pode-se utilizar variáveis temporárias para garantir uma sequência particular. De maneira similar, a ordem na qual argumentos são avaliados não é especificada, portanto, o _statement_
+
+```c
+  printf("%d %d\n", ++n, power(2,n)); // ERRADO!
+```
+
+pode produzir resultados diferentes em compiladores diferentes, dependendo se **n** é incrementado antes de **power** ser chamada. A solução, neste caso, é escrever
+
+```c
+  ++n;
+  printf("%d %d\n", n, power(2,n));
+```
+
+Logo, conclui-se que escrever código que depende da ordem de avaliação é uma prática ruim de programação em qualquer linguagem. 
+
