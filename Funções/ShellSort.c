@@ -1,3 +1,6 @@
+/* Organiza o vetor v em ordem crescente
+Algoritmo de D. L. Shell */
+
 void shellshort(int v[], int n)
 {
     int gap, i, j, temp;
