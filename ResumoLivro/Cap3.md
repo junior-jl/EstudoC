@@ -131,3 +131,54 @@ O _statement_ **break** causa uma saída imediatada do **switch**. Já que **cas
 A questão de "cair através" tem vantagens e desvantagens. No lado positivo, permite que vários **cases** sejam vinculados a uma única ação, como no exemplo anterior. No entanto, implica a necessidade de um **break** para prevenir a "queda" para o próximo.
 
 Como questão de boa prática de escrita, deve-se colocar um **break** após o último caso (**default** no exemplo), mesmo que seja logicamente desnecessário.
+
+### Loops - While and For
+
+No código
+
+```c
+  while (expressão)
+    statement
+```
+
+a expressão é avaliada. Se for não-nula, _statement_ é executado e **expressão** é reavaliada. O ciclo continua até que **expressão** seja nula, e a execução continua após _statement_.
+
+O _statement_ for
+
+```c
+  for (expr1 ; expr2 ; expr3)
+    statement
+```
+
+é equivalente a 
+
+```c
+  expr1;
+  while (expr2) {
+    statement
+    expr3;
+  }
+```
+
+com exceção do comportamento de **continue**, que é descrito ainda neste capítulo.
+
+Gramaticamente, os três componentes de um _loop **for**_ são expressões. Mais comumente, **expr1** e **expr3** são _assignments_ ou chamadas de funções e **expr2** é uma expressão relacional. Qualquer uma das três partes pode ser omitida, no entanto, o ponto e vírgula deve ser mantido. Se **expr1** ou **expr3** são omitidas, é simplesmente retirado da expansão. Se o teste **expr2** não estiver presente, é tomado como permanentemente verdadeiro, portanto,
+
+```c
+  for (;;) {
+    ...
+  }
+```
+
+é um _loop_ "infinito", presumivelmente quebrado por outros meios, como um **break** ou **return**.
+
+Utilizar **while** ou **for** é uma questão de preferência pessoal e do programa a ser executado. Por exemplo, em
+
+```c
+  while ((c = getchar()) == ' ' || c == '\n' || c == '\t')
+  ; // pula caracteres de espaço em branco
+```
+
+não há inicialização ou reinicialização, portanto, o **while** é a escolha natural. O **for** é preferível quando há uma inicialização e incremento simples, tendo em vista que estes _statements_ ficam juntos e visíveis no topo do _loop_.
+
+Os componentes de um _loop **for**_ não precisam ser, necessariamente, expressões aritméticas. No entanto, não é recomendado realizar computações não relacionadas nos campos de inicialização e incremento, pois são campos melhor utilizados para controle de operações do _loop_.
