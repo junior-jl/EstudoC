@@ -183,6 +183,8 @@ não há inicialização ou reinicialização, portanto, o **while** é a escolh
 
 Os componentes de um _loop **for**_ não precisam ser, necessariamente, expressões aritméticas. No entanto, não é recomendado realizar computações não relacionadas nos campos de inicialização e incremento, pois são campos melhor utilizados para controle de operações do _loop_.
 
+#### Operador vírgula
+
 Um último operador em C é a vírgula ",", comumente encontrado no _statement **for**_. Um par de expressões separado por uma vírgula é avaliado da esquerda para a direita, e o tipo e valor do resultado é o tipo e valor do operando da direita. Assim, em um **for**, é possível colocar múltiplas expressões em várias partes, por exemplo, para processar dois índices em paralelo. Este fato é ilustrado na função **reverse (s)**, que reverte a _string _ **s** no lugar.
 
 ```c
@@ -199,4 +201,13 @@ Um último operador em C é a vírgula ",", comumente encontrado no _statement *
       s[j] = c;
     }
   }
+```
+
+É importante salientar que as vírgulas que separam argumentos de funções, variáveis em declarações, etc., não são **operadores vírgula**, e não garantem avaliação da esquerda para direita.
+
+O operador vírgula deve ser utilizado com moderação. Os usos mais adequados são para construções fortemente relacionadas, como no _loop **for**_ de **reverse** e em **macros** onde a computação multipasso tem que ser uma expressão única. Uma expressão com vírgula também pode ser apropriada para a troca de elemntos em **reverse**, a qual pode ser pensada como uma única operação, i.e.,
+
+```c
+  for (i = 0, j = strlen(s) - 1; i < j; i++, j--)
+    c = s[i], s[i] = s[j], s[j] = c;
 ```
