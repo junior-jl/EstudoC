@@ -182,3 +182,21 @@ Utilizar **while** ou **for** é uma questão de preferência pessoal e do progr
 não há inicialização ou reinicialização, portanto, o **while** é a escolha natural. O **for** é preferível quando há uma inicialização e incremento simples, tendo em vista que estes _statements_ ficam juntos e visíveis no topo do _loop_.
 
 Os componentes de um _loop **for**_ não precisam ser, necessariamente, expressões aritméticas. No entanto, não é recomendado realizar computações não relacionadas nos campos de inicialização e incremento, pois são campos melhor utilizados para controle de operações do _loop_.
+
+Um último operador em C é a vírgula ",", comumente encontrado no _statement **for**_. Um par de expressões separado por uma vírgula é avaliado da esquerda para a direita, e o tipo e valor do resultado é o tipo e valor do operando da direita. Assim, em um **for**, é possível colocar múltiplas expressões em várias partes, por exemplo, para processar dois índices em paralelo. Este fato é ilustrado na função **reverse (s)**, que reverte a _string _ **s** no lugar.
+
+```c
+  /* reverse: reverte uma string s no lugar */
+  #include <string.h>
+  
+  void reverse (char s[])
+  {
+    int c, i, j;
+    
+    for (i = 0, j = strlen(s) - 1; i < j; i++, j--){
+      c = s[i];
+      s[i] = s[j];
+      s[j] = c;
+    }
+  }
+```
