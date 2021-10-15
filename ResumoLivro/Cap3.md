@@ -1,6 +1,8 @@
 # The C Programming Language - Ritchie and Kernighan (2nd edition)
 ## Chapter 3 - Control Flow
 
+<div align="justify">
+
 Os _statements control-flow_ de uma linguagem especificam a ordem na qual computações são feitas. A maioria das construções deste tipo já foram vistas em exemplos anteriores; aqui o conjunto será completado e as discutidas anteriormente serão aprofundadas.
 
 ### Statements and Blocks
@@ -250,3 +252,5 @@ erro:
 ```
 
 Uma _label_ tem a mesma forma de um nome de variável, e é seguida por um ponto e vírgula (_colon_). Pode ser anexada a qualquer _statement_ na mesma função que o **goto**. O alcance de uma _label_ é a função inteira.
+  
+  </div>
