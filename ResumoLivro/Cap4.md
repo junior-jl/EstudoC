@@ -256,3 +256,28 @@ Assim, a estrutura do programa é um _loop_ que performa operações apropriadas
       erro
 ```
 
+As operações de _pushing_ e _popping_ um _stack_ são triviais, porém, ao incluir o tempo de detecção e recuperação, são longas o suficiente para que uma função separada para cada seja mais eficiente. Além disso, é interessante uma função para pegar a próxima entrada (operando ou operador).
+
+A principal decisão do projeto é onde fica o _stack_, isto é, quais rotinas podem acessá-lo diretamente. Uma possibilidade é mantê-lo na **main** e passar o _stack_ e sua posição atual para as rotinas que vão _push and pop it_. Mas **main** não precisa saber das variáveis que controlam o _stack_; ela só faz as operações _push_ e _pop_. Então, decidiu-se armazenar o monte e suas informações em variáveis externas acessíveis para as funções **push** e **pop**, mas não para **main**. Traduzindo para código, seria algo similar a
+
+```c
+#includes
+#defines
+
+declaração de funções para main
+
+main() { ... }
+
+variáveis externas para push e pop
+
+void push (double f) { ... }
+double pop (void) { ... }
+
+int getop (char s[]) { ... }
+
+rotinas chamadas por getop
+
+```
+
+A função **main** é um loop contendo um grande **switch** do tipo de operador ou operando:
+
