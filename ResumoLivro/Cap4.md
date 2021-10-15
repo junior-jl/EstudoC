@@ -204,3 +204,55 @@ Se um nome que não tiver sido previamente declarado ocorre em uma expressão e 
 ```
 
 nada é assumido sobre os argumentos de **atof**; toda a checagem de parâmetros é desligada. Este significado especial da lista de argumentos vazia é para permitir que programas antigos em C compilem em novos compiladores. Porém, é uma má ideia usá-la para novos programas. Se a função possui argumentos, declare-os; se não há, use **void**.
+
+### External Variables
+
+Um programa em C consiste de um conjunto de objetos externos, que podem ser variáveis ou funções. O adjetivo "externo" é utilizado em contraste a "interno", que descreve os argumentos e variáveis definidos dentro de funções. Variáveis externas são definidas fora do escopo de qualquer função, podendo ser acessadas por qualquer função. As funções por si só são externas, pois C não permite a definição de uma função dentro de outra. Por padrão, variáveis e funções externas possuem a propriedade de que todas as referências ao mesmo nome, até mesmo em funções compiladas separadamente, são referências à mesma coisa (o padrão ANSI chama isso de _**external linkage**_.
+
+Se um grande número de variáveis precisa ser compartilhado entre funções, variáveis externas são mais convenientes e eficientes do que longas listas de argumentos. Porém, como comentado no capítulo 1, este raciocínio deve ser aplicado com cautela, pois pode gerar um efeito ruim na estrutura do programa.
+
+Vamos examinar essa propriedade com um exemplo maior. O problema é escrever um programa de calculadora que fornece os operadores **+, -, \*** e **/**. Por ser mais simples de implementar, a calculadora usará a notação polonesa inversa ao invés da notação infixa (notação geralmente utilizada onde o operador é colocado entre os operandos).
+
+Na notação polonesa reversa, cada operador segue seus operandos, assim, uma expressão infixa como:
+
+```
+(1 - 2) \* (4 + 5)
+```
+
+é inserida como
+
+```
+1 2 - 4 5 + *
+```
+
+Parênteses não são necessários; a notação não gera ambiguidade, desde que se saiba quantos operandos cada operador espera.
+
+A implementação será feita da seguinte forma:
+
+- Cada operando é colocado em um monte (_stack_);
+- Quando chega o operador, o número adequado de operandos (dois para operadores binários) é "estourado" (_popped_) e o operador é aplicado a estes;
+- O resultado é colocado (_pushed_) de volta no monte.
+
+No exemplo acima, o passo-a-passo seria:
+
+- 1 e 2 são colocados no monte, daí substituídos por sua diferença (-1);
+- Após isso, 4 e 5 são colocados e substituídos por sua soma (9);
+- O produto de -1 e 9 (-9) os substitui no monte;
+- O valor no topo do monte é retirado e impresso quando o fim da linha de entrada é encontrado.
+
+Assim, a estrutura do programa é um _loop_ que performa operações apropriadas em cada operador e operando quando aparecem (a tradução de alguns termos ficou confusa pra mim, coloquei entre parênteses):
+
+```c
+  while (o próximo operador ou operando não for o indicador fim de arquivo (EOF))
+    if (número)
+      joga o número (push it)
+    else if (operador)
+      coloca operandos (pop)
+      faz a operação
+      joga o resultado (push)
+    else if (newline)
+      coloca e imprime o topo do monte (pop and print top of stack)
+    else
+      erro
+```
+
