@@ -132,3 +132,75 @@ cc main.c getline.c strindex.c
 ```
 
 compila os três arquivos, colocando o código objeto resultante nos arquivos **main.o, getline.o** e **strindex.o**, assim carregando todas num arquivo executável **a.out**.  O comando **cc** utiliza ".c" e ".o" para diferenciar arquivos fonte de arquivos objeto.
+
+### Functions Returning Non-integers
+
+Até o momento, todas as funções utilizadas retornaram nenhum valor (**void**) ou um **int**. Muitas funções numéricas como **sqrt, sin, cos** retornam **double**; outras funções especializadas retornam outros tipos. Para ilustrar como lidar com isso, escrevemos e usamos a função **atof(s)**, que converte a _string_ **s** no seu equivalente ponto flutuante de precisão dupla. A função descrita abaixo não é de alta qualidade, porém funciona bem para fins didáticos; a biblioteca padrão **<stdlib.h>** inclue um **atof**.
+
+```c
+double atof(char s[])
+{
+    double val, power;
+    int i, sign;
+
+    for (i = 0; isspace(s[i]); i++) // pula espaços brancos
+        ;
+    sign = (s[i] == '-') ? -1 : 1;
+    if (s[i] == '+' || s[i] == '-')
+        i++;
+    for (val = 0.0; isdigit(s[i]); i++)
+        val = 10.0 * val + (s[i] - '0');
+    if (s[i] == '.')
+        i++;
+    for (power = 1.0; isdigit(s[i]); i++)
+    {
+        val = 10.0 * val + (s[i] - '0');
+        power *= 10.0;
+    }
+    return sign * val / power;
+}
+```
+
+Vale ressaltar que a rotina de chamada deve saber que **atof** retorna um valor não-**int**. Uma forma de assegurar isso é declara **atof** explicitamente na rotina de chamada. Tal declaração é mostrada no código de uma calculadora primitiva, que lê um número por linha, opcionalmente precedido por um sinal, e os soma, imprimindo a soma atual após cada entrada.
+
+```c
+#include <stdio.h>
+
+#define MAXLINE 100
+
+main()
+{
+    double sum, atof(char []);
+    char line[MAXLINE];
+    int getline(char line[], int max);
+
+    sum = 0;
+    while (getline(line, MAXLINE) > 0)
+        printf("\t%f\n", sum += atof(line));
+    return 0;
+}
+```
+
+A declaração
+
+```c
+  double sum, atof(char []);
+```
+
+diz que **sum** é uma variável **double** e **atof** é uma função que recebe um **char[]** e retorna um **double**. 
+
+A função **atof** deve ser declarada e definida consistentemente. Se **atof** e sua chamada em **main** tiverem tipos inconsistentes no mesmo arquivo, o erro será detectado pelo compilador. No entanto, se (o que é mais provável), **atof** foi compilada separadamente, a incompatibilidade não seria detectada, **atof** retornaria um **double** que **main** trataria como **int** e a resposta acabaria sem sentido.
+
+A razão para que uma incompatibilidade ocorra é que se não há protótipo de função, esta é implicitamente declarada pela sua primeira aparição numa expressão, como
+
+```c
+  sum += atof(line)
+```
+
+Se um nome que não tiver sido previamente declarado ocorre em uma expressão e é seguido de um parêntese esquerdo, é declarado por contexto como um nome de função, assume-se que a função retorna um **int** e nada é assumido acerca de seus argumentos. Além disso, se uma declaração de função não inclui argumentos, como
+
+```c
+  double atof();
+```
+
+nada é assumido sobre os argumentos de **atof**; toda a checagem de parâmetros é desligada. Este significado especial da lista de argumentos vazia é para permitir que programas antigos em C compilem em novos compiladores. Porém, é uma má ideia usá-la para novos programas. Se a função possui argumentos, declare-os; se não há, use **void**.
