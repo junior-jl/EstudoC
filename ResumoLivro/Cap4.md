@@ -281,3 +281,161 @@ rotinas chamadas por getop
 
 A função **main** é um loop contendo um grande **switch** do tipo de operador ou operando:
 
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAXOP 100
+#define NUMBER '0'
+
+int getop(char []);
+void push(double);
+double pop(void);
+
+//Calculadora com notação polonesa reversa
+
+main()
+{
+    int type;
+    double op2;
+    char s[MAXOP];
+
+    while ((type = getop(s)) != EOF)
+    {
+        switch(type)
+        {
+        case NUMBER:
+            push(atof(s));
+            break;
+        case '+':
+            push(pop() + pop());
+            break;
+        case '*':
+            push(pop() * pop());
+            break;
+        case '-':
+            op2 = pop();
+            push(pop() - op2);
+            break;
+        case '/':
+            op2 = pop();
+            if (op2 != 0.0)
+                push(pop() / op2);
+            else
+                printf("error: zero divisor\n");
+            break;
+        case '\n':
+            printf("\t%.8g\n", pop());
+            break;
+        default:
+            printf("error: unknown command %s\n", s);
+            break;
+        }
+    }
+    return 0;
+}
+
+```
+
+Os operadores **+** e **\*** são comutativos, portanto, a ordem que os operandos são combinados é irrelevante, mas para **-** e **/** os operadores da esquerda e da direita devem ser distinguidos. Em
+
+```c
+  push(pop() - pop()); // ERRADO!
+```
+
+a ordem na qual as duas chamadas de **pop** são avaliadas não é definida. Para garantir a ordem correta, é necessário _pop_ o primeiro valor numa variável temporária, como foi feito em **main**.
+
+```c
+#define MAXVAL 100 // máxima profundidade do stack de valores
+
+int sp = 0; // próxima posição livre do stack
+double val[MAXVAL]; // stack de valores
+
+//push: push f onto value stack
+
+void push(double f)
+{
+    if (sp < MAXVAL)
+        val[sp++] = f;
+    else
+        printf("error: stack full, can't push %g\n", f);
+}
+
+//pop: pop and return top value from stack
+
+double pop(void)
+{
+    if (sp > 0)
+        return val[--sp];
+    else{
+        printf("error: stack empty\n");
+        return 0.0;
+    }
+}
+
+```
+
+Note que o _stack_ e o _stack index_ são declarados fora das funções **pop** e **push** para que possam ser compartilhados por ambas. No entanto, **main** não se refere a nenhuma dessas variáveis.
+
+Vamos agora à implementação de **getop**, a função que recebe o próximo operador ou operando. A tarefa é simples. Pule _blanks_ e _tabs_. Se o próximo caractere não for um dígito ou ponto decimal, retorne-o. Senão, colete uma _string_ de dígitos (que podem incluir um ponto decimal), e retorne **NUMBER**, o sinal de que um número foi coletado.
+
+```c
+#include <ctype.h>
+
+int getch(void);
+void ungetch(int);
+
+//getop: pega o próximo operador ou operando numérico
+
+int getop(char s[])
+{
+    int i, c;
+    
+    while ((s[0] = c = getch()) == ' ' || c == '\t')
+        ;
+    s[1] = '\0';
+    if (!isdigit(c) && c != '.')
+        return c; // não é um número
+    i = 0;
+    if (isdigit(c)) // coleta a parte inteira
+        while (isdigit(s[++i] = c = getch()))
+            ;
+    if (c == '.') // coleta a parte fracionária
+        while (isdigit(s[++i] = c = getch()))
+            ;
+    s[i] = '\0';
+    if (c != EOF)
+        ungetch(c);
+    return NUMBER;
+}
+```
+
+O que são **getch** e **ungetch**? É comum um programa não conseguir determinar se já leu entradas suficientes até que tenha lido demais. Um exemplo é coletar os caracteres que compõem um número: até que o primeiro dígito "não-número" seja visto, o número não está completo. Mas então o programa tem que ler um caractere a mais, um caractere para o qual não estava preparado.
+
+O problema seria resolvido se pudéssemos "desler" (_un-read_) o caractere indesejado. Então, toda vez que o programa ler um caractere a mais, jogaria-o de volta à entrada, e o resto do código poderia se comportar como se nunca tivesse o lido. **getch** entrega o próximo caractere da entrada a ser considerado; **ungetch** lembra os caracteres "devolvidos" à entrada, para que chamadas subsequentes de **getch** retornem a esses valores antes de ler uma nova entrada.
+
+Como elas funcionam é simples. **ungetch** coloca o caractere jogado de volta em um **_buffer_** compartilhado - um vetor de caracteres. **getch** lê do buffer se existe algo lá, e chama **getchar** se o _buffer_ estvier vazio. Deve haver também uma variável de índice que registre a posição do caractere atual no _buffer_.
+
+Já que o _buffer_ e o índice são compartilhados por **getch** e **ungetch** e devem guardar seus valores entre chamadas, devem ser externos a ambas as rotinas. Assim, podemos escrever **getch, ungetch** e suas variáveis compartilhadas como:
+
+```c
+#define BUFSIZE 100
+
+char buf[BUFSIZE]; // buffer para ungetch
+int bufp = 0; // próxima posição livre no buf
+
+int getch(void) // pega um (possivelmente jogado de volta) caractere
+{
+    return (bufp > 0) ? buf[--bufp] : getchar();
+}
+
+void ungetch(int c) // push character back on input
+{
+    if (bufp >= BUFSIZE)
+        printf("ungetch: too many characters\n");
+    else
+        buf[bufp++] = c;
+}
+```
+
+A biblioteca padrão include uma função **ungetc** que fornece um caractere de _pushback_ (será discutida no capítulo 7).
