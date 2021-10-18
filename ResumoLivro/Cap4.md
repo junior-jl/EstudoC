@@ -439,3 +439,54 @@ void ungetch(int c) // push character back on input
 ```
 
 A biblioteca padrão include uma função **ungetc** que fornece um caractere de _pushback_ (será discutida no capítulo 7).
+
+### Scope Rules
+
+As funções e variáveis externas que compõem um programa em C não precisam ser compiladas ao mesmo tempo; o texto fonte do programa pode ser mantido em diferentes arquivos, e rotinas previamente compiladas podem ser carregadas de bibliotecas. Dentre as questões de interesse estão:
+
+- Como declarações são escritas de modo que as variáveis sejam propriamente declaradas durante a compilação?
+- Como declarações são organizadas de modo que todas as partes sejam propriamente conectadas quando o programa for carregado?
+- Como declarações são organizadas de forma que haja apenas uma cópia?
+- Como variáveis externas são inicializadas?
+
+Vamos discutir estes tópicos reorganizando o programa de calculadora em vários arquivos. Praticamente, o programa da calculadora seria muito pequeno para necessitar de divisão, porém é uma ilustração eficiente.
+
+O escopo _(scope)_ de um nome é uma parte do programa dentro da qual o nome pode ser usado. Para uma variável automática declarada no início de uma função, o escopo é a função na qual seu nome foi declarado. Variáveis locais de mesmo nome em funções diferentes não possuem relação. O mesmo é válido para parâmetros de funções, que são, em efeito, variáveis locais.
+
+O escopo de uma variável externa ou função dura do ponto no qual é declarada até o fim do arquivo sendo compilado. Por exemplo, se **main, sp, val, push** e **pop** são definidas em um arquivo, na ordem mostrada abaixo,
+
+```c
+  main() { ... }
+  
+  int sp = 0;
+  double val[MAXVAL];
+  
+  void push(double f) { ... }
+  
+  double pop(void) { ... }
+```
+
+então as variáveis **sp** e **val** podem ser utilizadas em **push** e **pop** simplesmente nomeando-as; não é necessária outra declaração. No entanto, tais nomes não são "visíveis" a **main**, assim como as próprias funções **push** e **pop**.
+
+Por outro lado, se uma variável externa é referida antes de ser definida, ou definida em um arquivo diferente do que está sendo utilizada, uma declaração **extern** é obrigatória.
+
+É importante distinguir entre a **declaração** de uma variável externa e sua **definição**. Uma **declaração** anuncia as propriedades de uma variável (inicialmente, seu tipo); uma **definição** também causa reserva de memória. Se as linhas
+
+```c
+  int sp;
+  double val[MAXVAL];
+```
+
+aparecem fora de qualquer função, elas **definem** as variáveis externas **sp** e **val**, reservam memória para elas, e ainda servem como **declaração** para o resto do arquivo. Por outro lado, as linhas
+
+```c
+  extern int sp;
+  extern double val[];
+```
+
+**declaram** para o resto do arquivo que **sp** é um **int** e **val** é um vetor **double** (cujo tamanho é determinado em outro lugar), no entanto, não criam as variáveis nem reservam memória para elas.
+
+Deve haver apenas uma **definição** de uma variável externa dentre todos os arquivos que compõem o programa fonte; outros arquivos (ou o próprio arquivo na qual é definida) podem conter declarações **extern** para acessá-las. Tamanhos de vetores devem ser especificados na definição, mas são opcionais na declaração **extern**.
+
+A inicialização de uma variável externa acontece apenas na sua definição.
+
