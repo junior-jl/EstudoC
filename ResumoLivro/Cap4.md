@@ -490,3 +490,6 @@ Deve haver apenas uma **definição** de uma variável externa dentre todos os a
 
 A inicialização de uma variável externa acontece apenas na sua definição.
 
+### Header Files
+
+Vamos agora considerar dividir o programa da calculadora em diversos arquivos fonte, como seria feito se cada componente fosse substancialmente maior. A função **main** iria num arquivo, chamado **main.c**; **push, pop** e suas variáveis iriam num segundo arquivo, **stack.c**; **getop** num terceiro, **getop.c**. Finalmente, **getch** e **ungetch** iriam num quarto arquivo **getch.c**; estas últimas foram separadas pois, num programa realista, viriam de uma biblioteca compilada separadamente.
