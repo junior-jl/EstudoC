@@ -638,3 +638,73 @@ _Character arrays_ são um caso especial de inicialização; uma string pode ser
 ```
 
 Neste caso, o comprimento do vetor é cinco (quatro caracteres mais o terminador '\0').
+
+### Recursion
+
+Funções em C podem ser usadas recursivamente; isto é, uma função pode chamar a si mesma direta ou indiretamente. Considere imprimir um número como uma _character string_. Como mencionado anteriormente, os dígitos são gerados na ordem errada: dígitos de ordem baixa ficam disponíveis antes dos de ordem alta, mas precisam ser impressos de forma contrária.
+
+Há duas soluções para este problema. Uma é armazenar os dígitos em um _array_ como são gerados e imprimi-los na ordem inversa, como foi feito na seção 3.6. A alternativa é uma solução recursiva, na qual **printd** primeiro chama a si mesma para lidar com dígitos principais, e então imprime os dígitos subsequentes. Novamente, essa versão pode falhar no maior número negativo.
+
+```c
+  #include <stdio.h>
+  
+  //printd : imprime n em decimal
+  void printd(int n)
+  {
+    if (n < 0) {
+      putchar('-');
+      n = -n;
+    }
+    if (n / 10)
+      printd(n / 10);
+    putchar (n % 10 + '0');
+  }
+```
+
+Quando uma função chama a si mesma recursivamente, cada invocação recebe um novo conjunto de todas as variáveis automáticas, independentes do conjunto anterior. Assim, o seguinte passo-a-passo acontece:
+
+- O primeiro **printd** recebe o argumento **n = 123** e passa para um segundo **printd** o argumento **12**;
+- O segundo **printd** recebe **n = 12** e passa **1** para um terceiro **printd**;
+- O terceiro **printd** imprime **1** e retorna ao segundo nível;
+- Tal **printd** agora imprime **2** e retorna ao primeiro nível;
+- O primeiro nível imprime **3** e encerra.
+
+Outro bom exemplo de recursão é **_quicksort_**, um argumento de ordenação desenvolvido por C. A. R. Hoare em 1962. Dado um vetor, um elemento é escolhido e os outros são particionados em dois subconjuntos - uma partição de elementos menores que o elemento escolhido e outra de maiores ou iguais. O mesmo processo é aplicado recursivamente aos dois subconjuntos. Quando um subconjunto possui menos de dois elementos, não necessita de ordenação; isso encerra a recursão.
+
+A versão a seguir não é mais rápida possível de _quicksort_, mas é uma das mais simples. O elemento do meio de cada subvetor foi utilizado para particionar.
+
+```c
+  // qsort: ordena v[esquerda] ... v[direita] em ordem crescente
+  void qsort(int v[], int esq, int dir)
+  {
+    int i, ultimo;
+    void swap(int v[], int i, int j);
+    
+    if (esq >= dir) // não faz nada se o array contém menos de dois elementos
+      return;
+    swap(v, esq, (esq + dir)/2); // move os elementos da partição
+    ultimo = esq; // para v[0]
+    for (i = esq + 1; i <= dir; i++) // partição
+      if (v[i] < v[esq])
+        swap(v, ++ultimo, i);
+    swap(v, esq, ultimo); // restaura elemento de partição
+    qsort(v, esq, ultimo - 1);
+    qsort(v, ultimo + 1, dir);
+```
+
+Nós movemos a operação de _swap_ (permuta) para uma função separada, pois esta ocorre três vezes em **qsort**.
+
+```c
+  // swap : permuta v[i] e v[j]
+  void swap(int v[], int i, int j)
+  {
+    int temp;
+    
+    temp = v[i];
+    v[i] = v[j];
+    v[j] = temp;
+```
+
+A biblioteca padrão inclui uma versão de **qsort** que ordena objetos de qualquer tipo.
+
+Recursão pode não fornecer economia de armazenamento, já que um _stack_ de valores sendo processados deve ser mantido em algum lugar. Também não traz velocidade. No entanto, um código que utiliza recursão é mais compacto e muitas vezes mais fácil de escrever e entender do que seu equivalente não-recursivo. Este recurso é especialmente conveniente para estruturas de dados definidas recursivamente como árvores; um bom exemplo será visto na seção 6.5.
