@@ -493,3 +493,30 @@ A inicialização de uma variável externa acontece apenas na sua definição.
 ### Header Files
 
 Vamos agora considerar dividir o programa da calculadora em diversos arquivos fonte, como seria feito se cada componente fosse substancialmente maior. A função **main** iria num arquivo, chamado **main.c**; **push, pop** e suas variáveis iriam num segundo arquivo, **stack.c**; **getop** num terceiro, **getop.c**. Finalmente, **getch** e **ungetch** iriam num quarto arquivo **getch.c**; estas últimas foram separadas pois, num programa realista, viriam de uma biblioteca compilada separadamente.
+
+Só há mais uma questão a se preocupar - as definições e declarações compartilhadas pelos arquivos. Deve-se centralizar, tanto quanto possível, para que haja apenas uma cópia. Portanto, colocamos esse material comum em uma _header file_ (arquivo cabeçalho), **calc.h**, que será incluído onde for necessário. O programa resultante tem a seguinte forma:
+
+![image](https://user-images.githubusercontent.com/69206952/137824586-e3beba7d-d295-483d-a6a3-6b48e4446852.png)
+
+Há um _tradeoff_ (uma troca com vantagens e desvantagens) entre o desejo de que cada arquivo tenha acesso à informação necessária para seu trabalho e a realidade prática da dificuldade de manter mais arquivos _header_. 
+
+### Static Variables
+
+As variáveis **sp** e **val** em **stack.c**, e **buf** e **bufp** em **getch.c** são para uso exclusivo das funções em seus respectivos arquivos, e não devem ser acessadas por nada mais. A declaração **static**, aplicada a uma função ou variável externa, limita o escopo daquele objeto para o resto do arquivo fonte sendo compilado. Assim, **static** fornece uma maneira de esconder nomes como **buf** e **bufp** na combinação **getch-ungetch**, as quais devem ser externas para que possam ser compartilhadas, no entanto, não deveria ser vista pelos usuários de **getch** e **ungetch**.
+
+O armazenamento estático é especificado colocando o prefixo **static** antes da declaração normal da variável. Se as duas rotinas e as duas variáveis são compiladas em um arquivo, como em
+
+```c
+  static char buf[BUFSIZE];
+  static int bufp = 0;
+  
+  int getch(void) { ... }
+  
+  void ungetch(int c) { ... }
+```
+
+então nenhuma outra rotina será capaz de acessar **buf** e **bufp**, e tais nomes não conflitarão com os mesmos nomes em outros arquivos do mesmo programa. Da mesma forma, as variáveis que **push** e **pop** utilizam para manipular o monte (_stack_) podem ser escondidas, declarando **sp** e **val** como **static**.
+
+A declaração externa **static** geralmente é utilizada para variáveis, porém pode ser aplicada em funções. Normalmente, nomes de funções são globais, visíveis a qualquer parte do programa. Se uma função é declarada como **static**, no entanto, seu nome é invisível fora do arquivo no qual é declarada.
+
+A declaração **static** também pode ser aplicada a variáveis internas. Nesse caso, tornam-se locais a uma função particular como variáveis automáticas, mas, ao contrário destas, permanecem existindo sem a necessidade da chamada da função a qual pertencem. Isso significa que **static** utilizado em variáveis internas fornece armazenamento permanente e exclusivo dentro de uma função única. 
