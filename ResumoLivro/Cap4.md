@@ -216,7 +216,7 @@ Vamos examinar essa propriedade com um exemplo maior. O problema é escrever um 
 Na notação polonesa reversa, cada operador segue seus operandos, assim, uma expressão infixa como:
 
 ```
-(1 - 2) \* (4 + 5)
+(1 - 2) * (4 + 5)
 ```
 
 é inserida como
