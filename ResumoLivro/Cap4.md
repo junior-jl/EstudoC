@@ -708,3 +708,23 @@ Nós movemos a operação de _swap_ (permuta) para uma função separada, pois e
 A biblioteca padrão inclui uma versão de **qsort** que ordena objetos de qualquer tipo.
 
 Recursão pode não fornecer economia de armazenamento, já que um _stack_ de valores sendo processados deve ser mantido em algum lugar. Também não traz velocidade. No entanto, um código que utiliza recursão é mais compacto e muitas vezes mais fácil de escrever e entender do que seu equivalente não-recursivo. Este recurso é especialmente conveniente para estruturas de dados definidas recursivamente como árvores; um bom exemplo será visto na seção 6.5.
+
+### The C Preprocessor
+
+C fornece certas facilidades por meio de um pré-processador, que é, conceitualmente, um primeiro passo separado na compilação. Os dois recursos mais frequentemente utilizados são **#include**, para incluir conteúdo de um arquivo durante a compilação, e **#define**, para substituir um símbolo (_token_) por uma sequência arbitrária de caracteres. Outros recursos são descritos nesta seção incluem compilação condicional e macros com argumentos.
+
+#### File Inclusion
+
+A inclusão de arquivos facilita o manuseio de colecões de **#defines** e declarações (entre outras coisas). Uma linha fonte na forma
+
+```c
+  #include "nomedoarquivo"
+```
+
+ou
+
+```c
+  #include <nomedoarquivo>
+```
+
+é substituída com o conteúdo do arquivo **nomedoarquivo**. Se **nomedoarquivo** está entre aspas, a busca pelo arquivo geralmente inicia pelo local onde o arquivo fonte foi encontrado; se não é achado lá, ou se o nome está cercado por < e >, a busca segue uma regra definida por implementação para encontrar o arquivo. Um arquivo incluído pode conter suas próprias linhas **#include**.
