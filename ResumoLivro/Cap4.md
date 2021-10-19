@@ -578,3 +578,63 @@ então, dentro da função **f**, ocorrências de **x** se referem ao parâmetro
 Como boa prática, é melhor evitar nomes de variáveis que escondem nomes em um escopo exterior; o potencial para confusão e erro é muito grande.
 
 ### Initialization
+
+Inicialização foi mencionada brevemente várias vezes até agora, mas sempre dentro de outros tópicos. Esta seção resume algumas regras.
+
+Na ausência de inicialização explícita, variáveis externas e estáticas são inicializadas em zero; variáveis automáticas e de registro possuem valores iniciais indefinidos (lixo).
+
+Variáveis escalares podem ser inicializadas quando são definidas, através de um sinal de igualdade e uma expressão após seu nome:
+
+```c
+  int x = 1;
+  char squote = '\'';
+  long day = 1000L * 60L * 60L * 24L; // milissegundos/dia
+```
+
+Para variáveis **extern** e **static**, o inicializador deve ser uma expressão constante; a inicialização é feita uma vez, conceitualmente antes de o programa começar sua execução. No caso de variáveis automáticas e de registro, é feita toda vez que a função ou bloco é adentrado.
+
+Para tais variáveis, o inicializador não precisa necessariamente ser uma constante: pode ser uma expressão envolvendo valores previamente definidos, até mesmo chamadas de função. Por exemplo, ao invés de escrever
+
+```c
+  int binsearch(int x, int v[], int n)
+  {
+    int low = 0;
+    int high = n - 1;
+    int mid;
+    ...
+  }
+```
+
+pode-se escrever:
+
+```c
+  int low, high, mid;
+  low = 0;
+  high = n - 1;
+```
+
+Em efeito, inicializações de variáveis automáticas são apenas a forma abreviada de _assignment statements_. Que forma escolher é questão de gosto. No livro, utiliza-se, geralmente, _assignments_ explícitos, pois inicializadores em declarações são mais difíceis de ver e mais distantes do ponto de utilização.
+
+Um _array_ pode ser inicializado seguindo sua declaração com uma lista de inicializadores fechados por chaves e separados por vírgulas. Por exemplo, para inicializar um vetor **dias** com o número de dias em cada mês:
+
+```c
+int dias[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+```
+
+Quando o comprimento do vetor é omitido, o compilador irá computar seu tamanho contando os inicializadores, que seria 12 neste caso.
+
+Se há menos inicializadores para um _array_ do que o número especificado, os elementos faltantes serão zero para variáveis **extern, static** e automáticas. Mais iniciadores do que especificado é um erro. 
+
+_Character arrays_ são um caso especial de inicialização; uma string pode ser usada ao invés da notação de chaves e vírgulas:
+
+```c
+  char pattern[] = "ould";  
+```
+
+é a forma abreviada, porém equivalente de
+
+```c
+  char pattern[] = { 'o', 'u', 'l', 'd', '\0' };
+```
+
+Neste caso, o comprimento do vetor é cinco (quatro caracteres mais o terminador '\0').
