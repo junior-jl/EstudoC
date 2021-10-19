@@ -520,3 +520,61 @@ então nenhuma outra rotina será capaz de acessar **buf** e **bufp**, e tais no
 A declaração externa **static** geralmente é utilizada para variáveis, porém pode ser aplicada em funções. Normalmente, nomes de funções são globais, visíveis a qualquer parte do programa. Se uma função é declarada como **static**, no entanto, seu nome é invisível fora do arquivo no qual é declarada.
 
 A declaração **static** também pode ser aplicada a variáveis internas. Nesse caso, tornam-se locais a uma função particular como variáveis automáticas, mas, ao contrário destas, permanecem existindo sem a necessidade da chamada da função a qual pertencem. Isso significa que **static** utilizado em variáveis internas fornece armazenamento permanente e exclusivo dentro de uma função única. 
+
+### Register Variables
+
+Uma declaração **register** informa ao compilador que tal variável é bastante utilizada. A ideia é que variáveis **register** são colocadas em registradores de máquina, que podem resultar em programas menores e mais velozes. No entanto, compiladores são livres para ignorar o aviso.
+
+A declaração **register** é:
+
+```c
+  register int x;
+  register char c;
+```
+
+Tal declaração pode ser aplicada apenas a variáveis automáticas e parâmetros formais de uma função. No último caso, a declaração é da forma:
+
+```c
+  f(register unsigned m, register long n)
+  {
+    register int i;
+    ...
+  }
+```
+
+Na prática, há restrições a variáveis de registro, refletindo a realidade de _hardware_ subjacente (_underlying_?). Apenas algumas variáveis em cada função podem ser mantidas em registradores, e apenas certos tipos são permitidos. No entanto, declarações em excesso são inofensivas, pois a palavra **register** em excesso ou declarações proibidas são ignoradas. Ainda, não é possível pegar o endereço de uma variável de registro (tópico a ser discutido no capítulo 5), não importando se a variável é realmente colocada num registrador. As restrições específicas variam de máquina a máquina. 
+
+### Block Structure
+
+C não é uma linguagem estruturada em blocos no sentido de linguagens como Pascal e similares, pois funções não podem ser definidas dentro de outras. Por outro lado, variáveis podem ser declaradas de modo _block-structured_ dentro de uma função. Declarações de variáveis (incluindo inicializações) podem seguir a chave esquerda que introduz qualquer _compound statement_ (statement composto), não apenas aquele que inicia a função. Variáveis declaradas dessa forma escodem qualquer variáveis com nome igual em blocos externos, e permanecem existindo até encontrarem a chave direita correspondente. Por exemplo, em
+
+```c
+  if (n > 0) {
+  
+    int i; //declara um novo i
+    
+    for (i = 0; i < n; i++)
+      ...
+  }
+```
+
+o escopo da variável **i** é o ramo "verdadeiro" do **if**; esse **i** não possui relação com qualquer **i** fora do bloco. Uma variável automática declarada e inicializada em um bloco é inicializada toda vez que adentra tal bloco. Se a variável for **static** é inicializada apenas na primeira vez que o bloco é adentrado.
+
+Variáveis automáticas, incluindo parâmetros formais, também escondem variáveis e funções de mesmo nome. Dadas as declarações
+
+```c
+  int x;
+  int y;
+  
+  f(double x)
+  {
+    double y;
+    ...
+  }
+```
+
+então, dentro da função **f**, ocorrências de **x** se referem ao parâmetro, que é um **double**; fora de **f**, se referem ao **int x**. O mesmo é válido para y.
+
+Como boa prática, é melhor evitar nomes de variáveis que escondem nomes em um escopo exterior; o potencial para confusão e erro é muito grande.
+
+### Initialization
