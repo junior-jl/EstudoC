@@ -728,3 +728,99 @@ ou
 ```
 
 é substituída com o conteúdo do arquivo **nomedoarquivo**. Se **nomedoarquivo** está entre aspas, a busca pelo arquivo geralmente inicia pelo local onde o arquivo fonte foi encontrado; se não é achado lá, ou se o nome está cercado por < e >, a busca segue uma regra definida por implementação para encontrar o arquivo. Um arquivo incluído pode conter suas próprias linhas **#include**.
+
+**#include** é o modo preferível para organizar declarações juntas para um programa maior, pois garante que todos os arquivos fonte vão receber as mesmas definições e variáveis, eliminando possíveis bugs. Naturalmente, quando um arquivo incluído é mudado, todos os arquivos que dependem dele devem ser recompilados.
+
+#### Macro Substitution
+
+Uma definição tem a forma de
+
+```c
+  #define nome texto de substituição
+```
+
+É uma substituição macro da forma mais simples - as próximas ocorrências do _token_ **nome** serão substituídos por **texto de substituição**. O nome em um **#define** tem a mesma forma de nome do nome de uma variável; o **texto de substituição** é arbitrário. Normalmente, o texto de substituição é o resto da linha, porém uma definição longa pode ser continuada em várias linhas colocando um \ (_backslash_) no final de cada linha a ser continuada. O escopo de um nome definido por **#define** é do ponto de definição ao fim do arquivo fonte sendo compilado.
+
+Qualquer nome pode ser definido com qualquer texto de substituição. Por exemplo,
+
+```c
+  #define forever for (;;) // loop infinito
+```
+
+define uma nova palavra, **forever**, como um _loop_ infinito.
+
+Também é possível definir macros com argumentos, de forma que o texto de substituição seja diferente para diferentes chamadas do macro. Por exemplo, definindo um macro chamado **max**:
+
+```c
+  #define max(A, B) ((A) > (B) ? (A) : (B))
+```
+
+Cada ocorrência do parâmetro formal (A ou B) serão substituídos pelo argumento real correspondente. Logo, a linha 
+
+```c
+  x = max(p + q, r + s);
+```
+
+será substituída por
+
+```c
+  x = ((p + q) > (r + s) ? (p + q) : (r + s));
+```
+
+Desde que os argumentos sejam tratados consistentemente, este macro serve para qualquer tipo de dado; não há necessidade de diferentes tipos de **max** para dados diferentes, como seria com funções.
+
+Se examinarmos a expansão de **max**, notamos alguns problemas. As expressões são avaliadas duas vezes; isso é ruim caso envolvam efeitos colaterais como operadores de incremento, ou entrada e saída. Por exemplo,
+
+```c
+  max(i++, j++) // ERRADO!
+```
+
+incrementaria o maior valor duas vezes. Além disso, alguns cuidados devem ser tomados com parênteses para garantir que a ordem correta de avaliação seja preservada; considere o que acontece com o macro
+
+```c
+  #define quadrado(x) x * x // ERRADO!
+```
+
+é invocado como **quadrado(z+1)** (provavelmente ficaria **z + 1 * z + 1**, que resultaria em **2z + 1**).
+
+Nomes podem ser indefinidos (_undefined_) com **#undef**, geralmente para garantir que uma rotina é realmente uma função e não um macro:
+
+```c
+#undef getchar
+
+int getchar(void) { ... }
+```
+
+Parâmetros formais não podem ser substituídos dentro de _strings_ entre aspas. Se, no entanto, um nome de parâmetro é precedido por um **#** no texto de substituição, a combinação será expandida em uma _string_ entre aspas com o parâmetro substituído pelo argumento real. Isso pode ser combinado com a concatenação de _string_ para fazer, por exemplo, um macro de _debugging print_:
+
+```c
+  #define dprint(expr)  printf(#expr " = %g\n", expr)
+```
+
+Quando isto é invocado, como em
+
+```c
+  dprint(x/y);
+```
+
+o macro é expandido em
+
+```c
+  printf("x/y" " = %g\n", x/y);
+```
+
+e as strings são concatenadas, então o efeito é:
+
+```c
+  printf("x/y = %g\n", x/y);
+```
+
+Dentro do real argumento, cada " é substituída por \\" e cada \ por \\\\, então o resultado é uma _string constant_ legal.
+
+O operador do pré-processador **##** fornece uma maneira para concatenar argumentos reais durante a expansão de um macro. Se um parâmetro em um texto de substituição está adjacente a um **##**, tal parâmetro é substituído pelo argumento real, o **##** e qualquer espaço em branco ao redor é removido e o resultado é re-escaneado. Por exemplo, o macro **paste** concatena seus dois argumentos:
+
+```c
+  #define paste(frente, tras) frente ## tras
+```
+
+assim, **paste(name, 1)** cria o _token_ **name1**.
