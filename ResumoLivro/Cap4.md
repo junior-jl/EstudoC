@@ -1,6 +1,8 @@
 # The C Programming Language - Ritchie and Kernighan (2nd edition)
 ## Chapter 4 - Functions and Program Structure
 
+<div align="justify">
+
 Funções quebram grandes tarefas de computação em tarefas menores, e permitem a outras pessoas construírem a partir de programas anteriores, ao invés de começar do zero. Funções apropriadas "escondem" detalhes de operação de partes do programa que "não precisam saber" sobre isso, clarificando o todo e facilitando mudanças.
 
 C foi projetado para tratar funções de maneira eficiente e simples; programas em C geralmente consistem de muitas pequenas funções em vez de poucas grandes. A declaração e definição de funções, como já discutido, foi a área com mudanças mais visíveis no C pelo padrão ANSI. É possível declarar os tipos dos argumentos quando a função é declarada. Além disso, quando argumentos são declarados apropriadamente, as transformações de tipo são realizadas automaticamente.
@@ -869,3 +871,5 @@ As linhas **#ifdef** e **#ifndef** são as formas especializadas para testar se 
   
   #endif
 ```
+      
+      </div>
