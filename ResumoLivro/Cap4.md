@@ -824,3 +824,48 @@ O operador do pré-processador **##** fornece uma maneira para concatenar argume
 ```
 
 assim, **paste(name, 1)** cria o _token_ **name1**.
+
+#### Conditional Inclusion
+
+É possível controlar o pré-processamento com _statements_ condicionais que são avaliados durante o pré-processamento. Isto fornece uma maneira de incluir código seletivamente, dependendo do valor das condições avaliadas durante a compilação.
+
+A linha **#if** avalia uma expressão inteira constante. Se a expressão for não nula, as linhas subsequentes até um **#endif**, ou **#elif**, ou **#else** são incluídas. (O _statement_ **#elif** é equivalente ao **else if**). A expressão **defined(nome)** em um **#if** é 1 se o **nome** já foi definido, senão é zero.
+
+Por exemplo, para garantir que o conteúdo de um arquivo **hdr.h** foi incluído apenas uma vez, o conteúdo do arquivo é cercado por uma condicional como:
+
+```c
+  #if !defined(HDR)
+  #define HDR
+  
+  // conteúdo de hdr.h vai aqui
+  
+  #endif
+```
+
+A primeira inclusão de **hdr.h** define o nome **HDR**; inclusões posteriores vão achar o nome definido e pular para **#endif**. Um estilo similar pode ser utilizado para evitar incluir arquivos múltiplas vezes. Se esse estilo é usado consistentemente, cada _header_ pode incluir outros _headers_ nos quais ele depende, sem que o usuário do _header_ tenha que lidar com a interdependência.
+
+A sequência abaixo testa o nome **SYSTEM** para decidir qual versão do _header_ deve incluir:
+
+```c
+  #if SYSTEM == SYSV
+    #define HDR "sysv.h"
+  #elif SYSTEM == BSD
+    #define HDR "bsd.h"
+  #elif SYSTEM == MSDOS
+    #define HDR "msdos.h"
+  #else
+    #define HDR "default.h"
+  #endif
+  #include HDR
+```
+
+As linhas **#ifdef** e **#ifndef** são as formas especializadas para testar se um nome é definido. O primeiro exemplo de **#if** acima poderia ser reescrito como
+
+```c
+  #ifndef HDR
+  #define HDR
+  
+  // conteúdo de hdr.h
+  
+  #endif
+```
