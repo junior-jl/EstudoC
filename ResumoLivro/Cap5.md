@@ -374,3 +374,52 @@ if (allocbuf + ALLOCSIZE - allocp >= n) { // se "cabe"
 checa se há espaço suficiente para satisfazer um chamado para **n** caracteres. Se há, o novo valor de **allocp** seria, no máximo, um além do final de **allocbuf**. Se o pedido for satisfeito, **alloc** retorna um ponteiro para o início de um bloco de caracteres (note a declaração da própria função). Se não **alloc** deve retornar algum sinal de que não há espaço restante. C garante que zero nunca é um endereço válido para dados, logo, um retorno de valor zero pode ser utilizado para sinalizar uma anormalidade, neste caso, falta de espaço.
 
 Ponteiros e inteiros não são intercambiáveis. Zero é a única exceção: a constante zero pode ser atribuída a um ponteiro, e um ponteiro pode ser comparado com a constante zero. A constante simbólica **NULL** é frequentemente usada no lugar do zero, como um mnemônico para indicar mais claramente de que é um valor especial para um ponteiro. **NULL** é definida em **<stdio.h>**. Utilizaremos **NULL** daqui em diante.
+
+Testes como 
+
+```c
+  if (allocbuf + ALLOCSIZE - allocp >= n) { // se "cabe"
+```
+
+e
+
+```c
+  if (p >= allocbuf && p < allocbuf + ALLOCSIZE)
+```
+
+mostram diversas facetas importantes da aritmética de ponteiros. Primeiro, ponteiros podem ser comparados em certas circunstâncias. Se **p** e **q** apontam para membros do mesmo vetor, então, as relações **==, !=, <, >=, etc** funcionam normalmente. Por exemplo,
+
+```c
+  p < q
+```
+
+é verdadeira se **p** aponta para um membro anterior a **q** do vetor. Qualquer ponteiro pode ser significativamente comparado por igualdade ou desigualdade com zero. Mas o comportamento é indefinido para aritmética ou comparações com ponteiros que não apontam para membros do mesmo vetor. (Há uma exceção: o endereço do primeiro elemento após o fim de um vetor pode ser usado em aritmética de ponteiros).
+
+Em segundo lugar, já foi observado que um ponteiro e um inteiro podem ser somados ou subtraídos. A construção
+
+```c
+  p + n
+```
+
+significa que o endereço do n-ésimo objeto além do qual **p** aponta atualmente. Isso é verdadeiro independentemente do tipo de objeto que **p** aponta; **n** é dimensionado de acordo com o tamanho dos objetos para os quais **p** aponta, que é determinado na declaração de **p**. Se um **int** possui quatro bytes, por exemplo, o **int** será escalado por quatro. 
+
+Subtração de ponteiros também é válida: se **p** e **q** apontam para elementos do mesmo vetor, e **p < q**, então **q - p + 1** é o número de elementos de **p** a **q** inclusivo. Este fato pode ser usado para escrever outra versão de **strlen**:
+
+```c
+  //strlen: retorna o comprimento de uma string s
+  
+  int strlen(char *s)
+  {
+    char *p = s;
+    
+    while (*p != '\0')
+      p++;
+    return p - s;
+  }
+```
+
+Nesta declaração, **p** é inicializado com **s**, isto é, para apontar para o primeiro caractere da string. No loop **while**, cada caractere é examinado um a um até que **'\0'** seja visto. Por conta de **p** apontar para caracteres, **p++** avança **p** para o próximo caractere a cada vez, e **p - s** fornece o número de caracteres avançados, isto é, o comprimento da string. (O número de caracteres na string poderia ser grande demais para armazenar num **int**. O _header_ **<stddef.h>** define um tipo **ptrdiff_t** que é grande o suficiente para armazenar a diferença (com sinal) de dois valores de ponteiros. Se estivermos sendo muito cautelosos, no entanto, podemos utilizar **size_t** para o tipo de retorno de **strlen**, para corresponder à versão da biblioteca padrão. **size_t** é o tipo _unsigned integer_ retornado pelo operador **sizeof**).
+
+A aritmética de ponteiros é consistente: se nós estamos lidando com **floats**, que ocupam mais armazenamento do que **chars**, e se **p** é um ponteiro para **float**, **p++** avançaria para o próximo **float**. Portanto, poderíamos escrever outra versão de **alloc** que mantém **floats** ao invés de **chars**, simplesmente mudando **char** para **float** ao longo de **alloc** e **afree**. Todas as manipulações de ponteiros automaticamente levarão em conta o tamanho do objeto para o qual apontam.
+
+As operações com ponteiros válidas são: _assignment_ de ponteiros do mesmo tipo, adicionar ou subtrair um ponteiro e um inteiro, subtrair ou comparar dois ponteiros para membros do mesmo vetor, e atribuir ou comparar a zero. Qualquer outra aritmética com ponteiros é ilegal. Não é legal adicionar dois ponteiros, ou multiplicar, dividir, deslocar, mascarar, adicionar a **float** ou **double**, ou ainda, com a exceção de **void\***, atribuir um ponteiro de um tipo a um ponteiro de outro tipo sem um **cast**.
