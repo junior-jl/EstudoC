@@ -188,3 +188,132 @@ Ao longo de **getint**, **\*pn** é utilizado como uma variável **int** comum. 
 
 ### Ponteiros e Vetores
 
+Em C, há um relacionamento forte entre ponteiros e vetores, forte o suficiente para que ponteiros e vetores devam ser discutidos simultaneamente. Qualquer operação que pode ser realizada por meio de subscritos de vetores pode ser obtida por meio de ponteiros. A versão com ponteiros, geralmente, será mais rápida, no entanto, para iniciantes, pode tornar-se mais difícil de entender.
+
+A declaração
+
+```c
+  int a[10];
+```
+
+define um vetor **a** de tamanho 10, isto é, um bloco de 10 objetos consecutivos chamados **a[0],  a[1], ..., a[9]**.
+
+![image](https://user-images.githubusercontent.com/69206952/140573398-df07064e-5b29-4945-ba55-b34293e269dc.png)
+
+A notação **a[i]** se refere ao i-ésimo elemento do vetor. Se **pa** é um ponteiro para um inteiro, declarado como
+
+```c
+  int *pa;
+```
+
+então, o _assignment_
+
+```c
+pa = &a[0]
+```
+
+seta **pa** para apontar para o elemento zero de **a**; isto é, **pa** contém o endereço de **a[0]**.
+
+![image](https://user-images.githubusercontent.com/69206952/140573589-1278d3f8-8ed8-4c24-ae73-b95be1a74bcf.png)
+
+Agora, o _assignment_
+
+```c
+  x = *pa;
+```
+
+copiará o conteúdo de **a[0]** em **x**.
+
+Se **pa** aponta para um elemento em particular de um vetor, então, por definição **pa + 1** aponta para o próximo elemento, **pa + i** aponta para **i** elementos após **pa**, e **pa - i** aponta para **i** elementos antes. Assim, se **pa** aponta para **a[0]**,
+
+```c
+  *(pa + 1)
+```
+
+se refere ao conteúdo de **a[1]**, **pa + i** é o endereço de **a[i]**, e **\*(pa + i)** é o conteúdo de **a[i]**.
+
+![image](https://user-images.githubusercontent.com/69206952/140573935-d8e2aa21-d651-4fab-a88e-b988210e03d3.png)
+
+Tais observações são verdadeiras independentemente do tipo ou tamanho das variáveis no vetor **a**. O significado de "adicionar 1 a um ponteiro", e, por extensão, toda a aritmética com ponteiros, é que **pa + 1** aponta para o próximo objeto, e **pa + i** para o i-ésimo objeto após **pa**.
+
+A correspondência entre indexar e aritmética com ponteiros é bem próxima. Por definição, o valor de uma variável ou expressão do tipo vetor é o endereço do elemento zero do vetor. Assim, após o _assignment_
+
+```c
+  pa = &a[0];
+```
+
+**pa** e **a** possuem valores idênticos. Tendo em vista que o nome de um vetor é um sinônimo para a localização do elemento inicial, então, a atribuição **pa = &a[0]** pode ser reescrita simplesmente como
+
+```c
+  pa = a;
+```
+
+Ainda mais surpreendente, pelo menos à primeira vista, é o fato de que uma referência a **a[i]** pode ser escrita como **\*(a + i)**. Ao avaliar **a[i]**, C converte para **\*(a + i)** imediatamente; as duas formas são equivalentes. Aplicando o operador **&** a ambas as partes desta equivalência, segue que **&a[i]** e **a + i** são idênticos: **a + i** é o endereço do i-ésimo elemento após **a**. Do outro lado da moeda, se **pa** é um ponteiro, expressões podem usá-lo com um subscrito; **pa[i]** é idêntico a **\*(pa + i)**. Em resumo, uma expressão com vetor e índice é equivalente a uma com ponteiro e _offset_.
+
+Há uma diferença entre um nome de vetor e um ponteiro que deve ser destacada. Um ponteiro é uma variável, logo, **pa = a** e **pa++** são expressões válidas. Mas, um nome de vetor não é uma variável; construções como **a = pa** e **a++** são ilegais.
+
+Quando um nome de vetor é passado a uma função, o que é passado é a localização do elemento inicial. Dentro da função chamada, o argumento é uma variável local, e então um parâmetro _array name_ é um ponteiro, isto é, uma variável contendo um endereço. Pode-se utilizar este fato para escrever outra versão de **strlen**, que computa o comprimento de uma string.
+
+```c
+  // strlen : retorna o comprimento de uma string s
+  int strlen(char *s)
+  {
+    int n;
+    
+    for (n = 0; *s != '\0'; s++)
+      n++;
+    return n;
+  }
+```
+
+Já que **s** é um ponteiro, incrementá-lo é perfeitamente legal; **s++** não causa efeito na _string_ de caracteres na função que chamou **strlen**, meramente incrementa a cópia particular do ponteiro. Isso significa que chamadas como
+
+```c
+  strlen("hello, world"); // string constant
+  strlen(array); // char array[100];
+  strlen(ptr); // char *ptr;
+```
+
+funcionam.
+
+Como parâmetros formais em uma definição de função,
+
+```c
+  char s[];
+```
+
+e 
+
+```c
+  char *s;
+```
+
+são equivalentes; preferimos o último porque diz mais explicitamente que o parâmetro é um ponteiro. Quando um nome de vetor é passado a uma função, a função pode - à sua conveniência - "acreditar" que foi fornecida ou um vetor ou um ponteiro, e manipulá-los de acordo. Pode-se até mesmo usar ambas as notações caso seja mais apropriado e claro.
+
+É possível passar parte de um vetor a uma função, passando um ponteiro para o começo do subvetor. Por exemplo, se **a** é um vetor,
+
+```c
+  f(&a[2])
+```
+
+e
+
+```c
+  f(a + 2)
+```
+
+ambas passam à função **f** o endereço do subvetor que começa em **a[2]**. Dentro de **f**, a declaração do parâmetro pode ler
+
+```c
+  f(int arr[]) { ... }
+```
+
+ou
+
+```c
+  f(int *arr) { ... }
+```
+
+Logo, no que diz respeito a **f**, não há diferença se o parâmetro se refere à parte de um vetor maior ou não.
+
+Se há certeza que os elementos existem, também é possível indexar um vetor de trás para frente; **p[-1], p [-2]**, e assim sucessivamente, são sintaticamente legais e se referem aos elementos que imediatamente precedem **p[0]**. Claro, é ilegal se referir a objetos que não estão dentro dos limites do vetor.
