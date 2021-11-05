@@ -317,3 +317,60 @@ ou
 Logo, no que diz respeito a **f**, não há diferença se o parâmetro se refere à parte de um vetor maior ou não.
 
 Se há certeza que os elementos existem, também é possível indexar um vetor de trás para frente; **p[-1], p [-2]**, e assim sucessivamente, são sintaticamente legais e se referem aos elementos que imediatamente precedem **p[0]**. Claro, é ilegal se referir a objetos que não estão dentro dos limites do vetor.
+
+### Address Arithmetic
+
+Se **p** é um ponteiro a algum elemento de um vetor, então **p++** incrementa **p** para apontar para o próximo elemento, e **p += i** o incrementa para apontar **i** elementos além de onde atualmente aponta. Estas e outras construções similares são as formas mais simples de aritmética com ponteiros ou endereços.
+
+A linguagem C é consistente e regular na sua abordagem de aritmética de endereço. Sua integração de ponteiros, vetores, e _address arithmetic_ é uma das forças da linguagem. Vamos ilustrar escrevendo um alocador de armazenamento rudimentar. Há duas rotinas. A primeira, **alloc(n)**, retorna um ponteiro **p** para **n** posições de caracteres consecutivas, que podem ser utilizadas pela "chamadora" de **alloc** para armazenar caracteres. A segunda, **afree(p)**, libera o armazenamento adquirido para que possa ser reutilizado mais tarde. As rotinas são "rudimentares" porque as chamadas a **afree** podem ser feitas na ordem oposta às chamadas às chamadas feitas em **alloc**. Isto é, o armazenamento gerenciado por **alloc** e **afree** é um "monte" (_stack_) ou uma lista "último a entrar - primeiro a sair". A biblioteca padrão fornece funções análogas chamadas **malloc** e **free** que não possuem tais restrições; na seção 8.7 mostra-se como são implementadas.
+
+A implementação mais fácil é fazer com que **alloc** distribua pedaços de um vetor de caracteres grande que nós chamaremos de **allocbuf**. Este vetor é particular a **alloc** e **afree**. Tendo em vista que lidam com ponteiros, não índices de vetores, nenhuma outra rotina precisa saber o nome do vetor, o qual pode ser declarado **static** no arquivo fonte contendo **alloc** e **afree**, tornando-se invisível para fora deste. Em implementações práticas, o vetor pode nem mesmo possuir um nome; ao invés disso, pode ser obtido chamando **malloc** ou "pedindo" ao sistema operacional (?) por um ponteiro para um bloco de armazenamento não nomeado.
+
+As outras informações necessárias são: quanto de **allocbuf** está sendo utilizado. Nós usamos um ponteiro, chamado **allocp**, que aponta para o próximo elemento livre. Quando é requisitado a **alloc** n caracteres, esta checa se há espaço suficiente restante em **allocbuf**. Caso haja, **alloc** retorna o valor atual de **allocp** (i.e., o início do próximo bloco livre), e então incrementa-o com **n** para o ponto da próxima área livre. Se não há espaço, **alloc** retorna zero. **afree(p)** meramente seta **allocp** para **p** se **p** está dentro de **allocbuf**
+
+![image](https://user-images.githubusercontent.com/69206952/140578495-75173d6d-a8cf-46b2-a705-566da1a6c550.png)
+
+```c
+  #define ALLOCSIZE 10000 // tamanho de espaço disponível
+  
+  static char allocbuf[ALLOCSIZE]; // armazenamento para alloc
+  static char *allocp = allocbuf; // próxima posição livre
+  
+  char *alloc(int n) // retorna ponteiro para n caracteres
+  {
+    if (allocbuf + ALLOCSIZE - allocp >= n) { // se "cabe"
+      allocp += n;
+      return allocp - n; // p anterior
+    } else // não há espaço suficiente
+        return 0;
+  }
+  void afree(char *p) // libera o armazenamento apontado por p
+  {
+    if (p >= allocbuf && p < allocbuf + ALLOCSIZE)
+      allocp = p;
+  }
+```
+
+Em geral, um ponteiro pode ser inicializado como qualquer outra variável, embora normalmente os únicos valores significativos são zero ou uma expressão envolvendo endereços de dados previamente definidos do tipo apropriado. A declaração
+
+```c
+  static char *allocp = allocbuf;
+```
+
+define **allocp** como um ponteiro de caracteres e inicializa-o para apontar para o começo de **allocbuf**, que é a próxima posição livre quando o programa inicia. Isto também poderia ter sido escrito como
+
+```c
+  static char *allocp = &allocbuf[0];
+```
+
+já que o nome do vetor é o endereço do elemento 0.
+
+O teste
+
+```c
+if (allocbuf + ALLOCSIZE - allocp >= n) { // se "cabe"
+```
+
+checa se há espaço suficiente para satisfazer um chamado para **n** caracteres. Se há, o novo valor de **allocp** seria, no máximo, um além do final de **allocbuf**. Se o pedido for satisfeito, **alloc** retorna um ponteiro para o início de um bloco de caracteres (note a declaração da própria função). Se não **alloc** deve retornar algum sinal de que não há espaço restante. C garante que zero nunca é um endereço válido para dados, logo, um retorno de valor zero pode ser utilizado para sinalizar uma anormalidade, neste caso, falta de espaço.
+
+Ponteiros e inteiros não são intercambiáveis. Zero é a única exceção: a constante zero pode ser atribuída a um ponteiro, e um ponteiro pode ser comparado com a constante zero. A constante simbólica **NULL** é frequentemente usada no lugar do zero, como um mnemônico para indicar mais claramente de que é um valor especial para um ponteiro. **NULL** é definida em **<stdio.h>**. Utilizaremos **NULL** daqui em diante.
