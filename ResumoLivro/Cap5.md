@@ -423,3 +423,148 @@ Nesta declaração, **p** é inicializado com **s**, isto é, para apontar para 
 A aritmética de ponteiros é consistente: se nós estamos lidando com **floats**, que ocupam mais armazenamento do que **chars**, e se **p** é um ponteiro para **float**, **p++** avançaria para o próximo **float**. Portanto, poderíamos escrever outra versão de **alloc** que mantém **floats** ao invés de **chars**, simplesmente mudando **char** para **float** ao longo de **alloc** e **afree**. Todas as manipulações de ponteiros automaticamente levarão em conta o tamanho do objeto para o qual apontam.
 
 As operações com ponteiros válidas são: _assignment_ de ponteiros do mesmo tipo, adicionar ou subtrair um ponteiro e um inteiro, subtrair ou comparar dois ponteiros para membros do mesmo vetor, e atribuir ou comparar a zero. Qualquer outra aritmética com ponteiros é ilegal. Não é legal adicionar dois ponteiros, ou multiplicar, dividir, deslocar, mascarar, adicionar a **float** ou **double**, ou ainda, com a exceção de **void\***, atribuir um ponteiro de um tipo a um ponteiro de outro tipo sem um **cast**.
+
+### Character Pointers and Functions
+
+Uma _string constant_, escrita como
+
+```c
+  "Eu sou uma string"
+```
+
+é um vetor de caracteres. Na representação interna, o vetor é terminado por um caractere nulo **'\0'** para que o programa possa encontrar o fim. O comprimento no armazenamento é, então, um a mais do que o número de caracteres entre as aspas duplas.
+
+Provavelmente a ocorrência mais comum de _string constants_ é como argumentos em funções, como em
+
+```c
+  printf("Hello, world\n");
+```
+
+Quando uma string de caracteres como essa aparece em um programa, o acesso a esta é feito por meio de um ponteiro de caractere; **printf** recebe um ponteiro para o começo do vetor de caracteres. Isto é, uma _string constant_ é acessada por um ponteiro para seu primeiro elemento.
+
+_String constants_ não precisam ser argumentos de função. Se **pmessage** é declarado como
+
+```c
+  char *pmessage;
+```
+
+então, o _statement_
+
+```c
+  pmessage = "now is the time";
+```
+
+atribui a **pmessage** um ponteiro para o vetor de caracteres. Não há uma cópia da _string_; apenas ponteiros são envolvidos. C não fornece operadores para processar uma _string_ inteira como uma unidade.
+
+Há uma diferença importante entre as seguintes definições:
+
+```c
+  char amessage[] = "now is the time"; // um vetor
+  char *pmessage = "now is the time"; // um ponteiro
+```
+
+**amessage** é um vetor, de tamanho suficiente para guardar a sequência de caracteres e o **'\0'** que a finaliza. Caracteres individuais dentro do vetor podem ser alterados, mas **amessage** sempre se referirá ao mesmo armazenamento. Por outro lado, **pmessage** é um ponteiro, inicializado para apontar para uma _string constant_; o ponteiro pode ser modificado para apontar para outro lugar, mas o resultado é indefinido caso tente-se modificar o conteúdo da _string_.
+
+![image](https://user-images.githubusercontent.com/69206952/140613830-2c596d9c-4bc6-448e-bc7c-0963627135ea.png)
+
+Ilustraremos mais aspectos de ponteiros e vetores estudando versões de duas funções úteis adaptadas da biblioteca padrão. A primeira função é **strcpy(s,t)**, que copia a _string_ **t** para a _string_ **s**. Seria ótimo apenas escrever **s = t**, no entanto, isto copia o ponteiro, não os caracteres. Para copiar os caracteres, é necessário um loop. A versão com vetor é a primeira:
+
+```c
+  //strcpy: copia t para s; versão com vetores e subscritos
+  void strcpy(char *s, char *t)
+  {
+    int i;
+    
+    i = 0;
+    while ((s[i] = t[i]) != '\0')
+      i++;
+  }
+```
+
+Para fins de comparação, aqui está uma versão com ponteiros:
+
+```c
+  //strcpy: copia t para s; versão com ponteiros 1
+  void strcpy(char *s, char *t)
+  {
+    while ((*s = *t) != '\0'){
+      s++;
+      t++;
+    }
+  }
+```
+
+Já que argumentos são passados por valor, **strcpy** pode usar os parâmetros **s** e **t** da forma que desejarem. Aqui, são ponteiros convenientemente inicializados, que "marcham" junto com os vetores um caractere por vez, até que o **'\0'** que termina **t** tenha sido copiado para **s**.
+
+Na prática, **strcpy** não seria escrito como mostramos acima. Programadores C experientes prefeririam
+
+```c
+  //strcpy: copia t para s; versão com ponteiros 2
+  void strcpy(char *s, char *t)
+  {
+    while ((*s++ = *t++) != '\0')
+      ;
+  }
+```
+
+Assim, o incremento de **s** e **t** é movido para a parte de teste do loop. O valor de **\*t++** é o caractere que **t** apontava antes de ser incrementado; o sufixo **++** não modifica **t** até que tal caractere tenha sido buscado. Da mesma forma, o caractere é armazenado na posição anterior de **s** antes de ser incremento. Este caractere é também o valor que é comparado com **'\0'**  para controlar o loop. O efeito de rede é que os caracteres são copiados de **t** para **s**, incluindo o terminador nulo.
+
+Como última abreviação, observe que uma comparação com **'\0'** é redundante, já que a questão é meramente se a expressão é zero. Portanto, a função seria escrita como
+
+```c
+  //strcpy: copia t para s; versão com ponteiros 3
+  void strcpy(char *s, char *t)
+  {
+    while (*s++ = *t++)
+      ;
+  }
+```
+
+Apesar de parecer enigmática à primeira vista, a conveniência notacional é considerável, e o _idiom_ deve ser dominado, pois será visto frequentemente em programas C.
+
+A função **strcpy** na biblioteca padrão (**<string.h>**) retorna a string alvo como seu valor de função.
+
+A segunda rotina que iremos examinar é **strcmp(s,t)**, que compara as strings de caracteres **s** e **t**, e retornam negativo, zero ou positivo se **s** é lexicograficamente menor que, igual a, ou maior que **t**. O valor é obtido subtraindo os caracteres na primeira posição na qual **s** e **t** "discordam".
+
+```c
+  // strcmp: retorna <0 se s<t, 0 se s==t, >0 se s>t
+  int strcmp(char *s, char *t)
+  {
+    int i;
+    
+    for (i = 0; s[i] == t[i]; i++)
+      if (s[i] == '\0')
+        return 0;
+    return s[i] - t[i];
+  }
+```
+
+A versão de **strcmp** com ponteiros é:
+
+```c
+  // strcmp: retorna <0 se s<t, 0 se s==t, >0 se s>t
+  int strcmp(char *s, char *t)
+  {
+    for ( ; *s == *t; s++, t++)
+      if (*s == '\0')
+        return 0;
+    return *s - *t;
+  }
+```
+
+Tendo em vista que **++** e **--** são operadores prefixos ou sufixos, outras combinações de **\*** e **++** e **--** podem ocorrer, apesar de menos frequentes. Por exemplo,
+
+```c
+  *--p
+```
+
+decrementa **p** antes de pegar o caractere para o qual **p** aponta. De fato, o par de expressões
+
+```c
+  *p++ = val; // leva val de volta para o monte
+  val = *--p; // "pop" o topo do monte em val
+```
+
+são os _idioms_ padrões para _pushing_ e _popping_ um _stack_.
+
+O _header_ **<string.h>** contém declarações para as funções mencionadas nesta seção, mais uma variedade de outras funções que lidam com strings.
