@@ -568,3 +568,150 @@ decrementa **p** antes de pegar o caractere para o qual **p** aponta. De fato, o
 são os _idioms_ padrões para _pushing_ e _popping_ um _stack_.
 
 O _header_ **<string.h>** contém declarações para as funções mencionadas nesta seção, mais uma variedade de outras funções que lidam com strings.
+
+### Pointer Arrays; Pointers to Pointers
+
+Ponteiros são variáveis, portanto, podem ser armazenados em vetores da mesma forma que outras variáveis podem. Vamos ilustrar escrevendo um programa que ordena um conjunto de linhas de texto em ordem alfabética, uma versão despojada do programa UNIX **sort**.
+
+No capítulo 3, foi apresentada uma função de ordenação Shell que ordenava um vetor de inteiros, e no capítulo 4, aperfeiçoamos com um **_quicksort_**. Os mesmos algoritmos funcionarão, exceto que agora nós temos que lidar com linhas de texto, que possuem comprimentos diferentes, e, diferentemente de inteiros, não podem ser comparados ou movidos numa única operação. Nós precisamos de uma representação de dados que lide eficientemente e convenientemente com linhas de texto de comprimento variável.
+
+Aqui é onde o vetor de ponteiros entra. Se as linhas a serem ordenadas são armazenadas "end-to-end" em um longo vetor de caracteres, então cada linha pode ser acessada por meio de um ponteiro para o seu primeiro caractere. Os próprios ponteiros podem ser armazenados em um vetor. Duas linhas podem ser comparadas passando seus respectivos ponteiros para **strcmp**. Quando duas linhas fora de ordem precisarem ser trocadas, os ponteiros no vetor de ponteiros são trocados, não as linhas propriamente ditas. 
+
+![image](https://user-images.githubusercontent.com/69206952/140615031-33ebec46-02e3-400c-ab6b-df0af68b518c.png)
+
+Isso elimina os problemas de sobrecarga e gerenciamento de memória que ocorreriam para movimentar as linhas em si.
+
+O processo de ordenação possui três etapas:
+
+```c
+  leia todas as linhas da entrada
+  ordene-as
+  imprima-as em ordem
+```
+
+Como de costume, é melhor dividir o programa em funções que correspondam a esta divisão natural, com a rotina principal controlado as outras funções. Vamos adiar a etapa de ordenação por um momento e concentrar-se na estrutura dos dados e a entrada e saída.
+
+A rotina de entrada deve coletar e salvar os caracteres de cada linha, e construir um vetor de ponteiros para as linhas. Ela também deve contar o número de linhas de entrada, já que esta informação é necessária para ordenar e imprimir. Já que a função de entrada só pode lidar com um número finito de linhas, pode retornar algum valor ilegal de contagem como -1 se muita entrada é fornecida.
+
+A rotina de saída deve apenas imprimir as linhas na ordem que aparecem no vetor de ponteiros.
+
+```c
+  #include <stdio.h>
+  #include <string.h>
+  
+  #define MAXLINES 5000 // máximo de #linhas para serem ordenadas
+  
+  char *lineptr[MAXLINES]; // ponteiros para as linhas de texto
+  
+  int readlines(char *lineptr[], int nlines);
+  void writelines(char *lineptr[], int nlines);
+  void qsort(char *lineptr[], int left, int right);
+  
+  //ordena linhas de entrada.
+  
+  main()
+  {
+    int nlines; // número de linhas de entrada lidas
+    
+    if ((nlines = readlines(lineptr, MAXLINES)) >= 0) {
+      qsort(lineptr, 0, nlines-1);
+      writelines(lineptr, nlines);
+      return 0;
+    } else {
+        printf("erro: entrada muito grande para ordenar\n");
+        return 1;
+    }
+  }
+  
+  #define MAXLEN 1000 // máximo comprimento de uma linha de entrada
+  int getline(char *, int);
+  char *alloc(int);
+  
+  //readlines: lê linhas de entrada
+  int readlines(char *lineptr[], int maxlines)
+  {
+    int len, nlines;
+    char *p, line[MAXLEN];
+    
+    nlines = 0;
+    while ((len = getline(line, MAXLEN)) > 0)
+      if (nlines >= maxlines || (p = alloc(len)) == NULL)
+        return -1;
+      else {
+        line[len - 1] = '\0'; // deleta newline
+        strcpy(p, line);
+        lineptr[nlines++] = p;
+      }
+    return nlines;
+  }
+  
+  //writelines: escreve linhas de saída
+  void writelines(char *lineptr[], int nlines)
+  {
+    int i;
+    
+    for (i = 0; i < nlines; i++)
+      printf("%s\n", lineptr[i]);
+  }
+```
+
+A função **getline** é mostrada na seção 1.9.
+
+A principal coisa nova é a declaração para **lineptr**:
+
+```c
+  char *lineptr[MAXLINES]
+```
+
+diz que **lineptr** é um vetor de **MAXLINES** elementos, cada elemento é um ponteiro para **char**. Isto é, **lineptr[i]** é um ponteiro para caractere, e **\*lineptr[i]** é o caractere para o qual este aponta, o primeiro caractere da i-ésima linha de texto salva.
+
+Já que **lineptr** é o nome de um vetor, este pode ser tratado como um ponteiro da mesma forma que nos exemplos anteriores, e **writelines** pode ser escrita como
+
+```c
+  //writelines: escreve linhas de saída
+  void writelines(char *lineptr[], int nlines)
+  {
+    while (nlines-- > 0)
+      printf("%s\n", *lineptr++);
+  }
+```
+
+Inicialmente, **\*lineptr** aponta para a primeira linha; cada incremento o avança para o ponteiro da próxima linha enquanto **nlines** é contado regressivamente.
+
+Com a entrada e saída sob controle, podemos prosseguir para a ordenação. O **quicksort** do capítulo 4 precisa de mudanças pequenas: as declarações precisam ser modificadas, e a operação de comparação deve ser feita por **strcmp**. O algoritmo permanece o mesmo, o que nos dá confiança de continuará funcionando.
+
+```c
+  //qsort: sort v[left] ... v[right] em ordem decrescente
+  void qsort(char *v[], int left, int right)
+  {
+    int i, last;
+    void swap(char *v[], int i, int j);
+    
+    if (left >= right) // não faz nada se o vetor contém menos de dois elementos
+      return;
+    swap(v, left, (left+right)/2);
+    last = left;
+    for (i = left + 1; i <= right; i++)
+      if (strcmp(v[i], v[left]) < 0)
+        swap(v, ++last, i);
+    swap(v, left, last);
+    qsort(v, left, last-1);
+    qsort(v, last+1, right);
+  }
+```
+
+Similarmente, a rotina **swap** precisa apenas de mudanças triviais:
+
+```c
+  // swap: intercambia v[i] e v[j]
+  void swap(char *v[], int i, int j)
+  {
+    char *temp;
+    
+    temp = v[i];
+    v[i] = v[j];
+    v[j] = temp;
+  }
+```
+
+Tendo em vista que qualquer elemento individual de **v** (ou **lineptr**) é um ponteiro de caractere, **temp** também deve ser, para que um possa ser copiado para o outro.
