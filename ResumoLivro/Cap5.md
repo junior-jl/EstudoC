@@ -715,3 +715,93 @@ Similarmente, a rotina **swap** precisa apenas de mudanças triviais:
 ```
 
 Tendo em vista que qualquer elemento individual de **v** (ou **lineptr**) é um ponteiro de caractere, **temp** também deve ser, para que um possa ser copiado para o outro.
+
+### Multi-dimensional Arrays
+
+C fornece vetores multidimensionais retangulares, apesar de que na prática são muito menos usados em comparação a vetores de ponteiros. Nesta seção, iremos mostrar algumas de suas propriedades.
+
+Considere o problema de conversão de data, de dia do mês para dia do ano e vice-versa. Por exemplo, dia 1 de março é dia 60 de um ano não-bissexto, e o dia 61 de um ano bissexto. Vamos definir duas funções para fazer as conversões: **day_of_year** converte o mês e dia em um dia do ano, e **month_day** converte o dia do ano em um mês e dia. Já que a última função computa dois valores, os argumento mês e dia serão ponteiros:
+
+```c
+  month_day(1988, 60, &m, &d)
+```
+
+seta **m** para 2 e **d** para 29 (29 de fevereiro).
+
+Ambas as funções precisam da mesma informação, uma tabela do número de dias em cada mês. Já que o número de dias por mês difere para anos bissextos ou não, é mais simples separá-los em duas linhas de um vetor de duas dimensões do que observar o que acontece em fevereiro durante a compilação. O vetor e as funções para performar as transformações são como mostrados a seguir:
+
+```c
+  static char daytab[2][13] = {
+    {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31},
+    {0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
+  };
+  
+  //day_of_year : seta o dia do ano para mês e dia
+  int day_of_year(int year, int month, int day)
+  {
+    int i, leap;
+    
+    leap = year%4 == 0 && year%100 != 0 || year%400 == 0;
+    for (i = 1; i < month; i++)
+      day += daytab[leap][i];
+    return day;
+  }
+  
+  //month_day: seta mês, dia de um dia do ano
+  void month_day(int year, int yearday, int *pmonth, int *pday)
+  {
+    int i, leap;
+    
+    leap = year%4 == 0 && year%100 != 0 || year%400 == 0;
+    for (i = 1; yearday > daytab[leap][i]; i++)
+      yearday -= daytab[leap][i];
+    *pmonth = i;
+    *pday = yearday;
+  }
+```
+
+Relembre que o valor aritmético de uma expressão lógico, como em **leap**, é ou 0 (falsa) ou 1 (verdadeira), portanto, pode ser utilizada como subscrito no array **daytab**.
+
+O vetor **daytab** deve ser externo a **day_of_year** e **month_day** para que ambas possam utilizá-lo. Utilizamos **char** para ilustrar um uso legítimo de **char** para armazenar pequenos inteiros não-caracteres.
+
+**daytab** é o primeiro vetor bidimensional que lidamos. Em C, um vetor de duas dimensões é, na verdade, um vetor de uma dimensão cujos elementos são um vetor. Dessa forma, os subscritos são escritos como
+
+```c
+  daytab[i][j] // [linha][coluna]
+```
+
+ao invés de
+
+```c
+  daytab[i,j] // ERRADO
+```
+
+Além dessa notação, um vetor de duas dimensões pode ser tratado basicamente da mesma forma que em outras linguagens. Elementos são armazenados por linhas, para que o subscrito mais à direita, ou coluna, varie mais rápido ao passo que elementos são acessados na ordem de armazenamento.
+
+Um vetor é inicializado por uma lista de inicializadores entre chaves; cada linha de um vetor de duas dimensões é inicializada por uma sublista correspondente. Nós iniciamos o vetor **daytab** com uma coluna de zeros para que o número do mês possa correr normalmente de 1 a 12 ao invés de 0 a 11.
+
+Se um vetor de duas dimensões é passado a uma função, a declaração do parâmetro na função deve incluir o número de colunas; o número de linhas é irrelevante, já que o que é passado, assim como antes, é um ponteiro para um vetor de linhas, onde cada linha é um vetor de 13 **ints**. Neste caso particular, é um ponteiro para objetos que são vetores de 13 **ints**. Assim, se o vetor **daytab** é passado a uma função **f**, a declaração de **f** seria
+
+```c
+  f(int daytab[2][13]) { ... }
+```
+
+Também poderia ser
+
+```c
+  f(int daytab[][13]) { ... }
+```
+
+já que o número de linhas é irrelevante, poderíamos escrever
+
+```c
+  f(int (*daytab)[13]) { ... }
+```
+
+que diz que o parâmetro é um ponteiro para um vetor de 13 inteiros. Os parênteses são necessários, pois os colchetes **[ ]** possuem maior precedência do que **\***. Sem parênteses, a declaração
+
+```c
+  int *daytab[13]
+```
+
+é um vetor de 13 ponteiros para inteiros. De forma mais geral, somente a primeira dimensão (subscrito) de um vetor é livre; todas as outras devem ser especificadas. Na seção 5.12 há uma discussão mais aprofundada sobre declarações complicadas.
