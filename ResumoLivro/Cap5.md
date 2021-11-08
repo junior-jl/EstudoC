@@ -805,3 +805,29 @@ que diz que o parâmetro é um ponteiro para um vetor de 13 inteiros. Os parênt
 ```
 
 é um vetor de 13 ponteiros para inteiros. De forma mais geral, somente a primeira dimensão (subscrito) de um vetor é livre; todas as outras devem ser especificadas. Na seção 5.12 há uma discussão mais aprofundada sobre declarações complicadas.
+
+### Initialization of Pointer Arrays
+
+Considere o problema de escrever uma função **month_name(n)**, que retorna um ponteiro para uma string de caracteres contendo o nome do n-ésimo mês. Está é uma aplicação ideal para um vetor **static**. **month_name** contém um vetor privativo de strings, e retorna um ponteiro para a string apropriada quando chamada. Esta seção mostra como este vetor de nomes é inicializado.
+
+A sintaxe é similar à inicializações anteriores:
+
+```c
+  // month_name: retorna nome do n-ésimo mês
+  char *month_name(int n)
+  {
+    static char *name[] = {
+    "Illegal month",
+    "January", "February", "March",
+    "April", "May", "June",
+    "July", "August", "September",
+    "October", "November", "December"
+    };
+    
+    return (n < 1 || n > 12) ? name[0] : name[n];
+  }
+```
+
+A declaração de **name**, que é um vetor de ponteiros a caracteres, é similar à declaração de **lineptr** no exemplo de ordenação. O inicializador é uma lista de strings de caracteres; cada uma é atribuída à sua posição correspondente no vetor. Os caracteres da i-ésima string são colocados em algum lugar, e um ponteiro para estes é armazenado em **name[i]**. Já que o tamanho do vetor **name** não é especificado, o compilador conta os inicializadores e preenche com o número correto.
+
+### Pointers vs. Multi-dimensional Arrays
