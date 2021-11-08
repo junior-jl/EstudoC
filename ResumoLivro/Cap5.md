@@ -857,3 +857,22 @@ com as de um vetor de duas dimensões:
 
 ![image](https://user-images.githubusercontent.com/69206952/140828378-4b37b68a-82f1-4b4c-9dcb-36d945126104.png)
 
+### Command-line Arguments
+
+Em ambientes que suportam C, há uma forma de passar argumentos ou parâmetros por linha de comando para um programa quando este começa sua execução. Quando **main** é chamada, é chamada com dois argumentos. O primeiro (convencionalmente chamado **argc**, para contar argumentos) é o número de argumentos _command-line_ com os quais o programa é invocado; o segundo (**argv**, para um vetor de argumentos) é um ponteiro para um vetor de strings que contém os argumentos, um por string. Costumeiramente, utilizamos múltiplos níveis de ponteiros para manipular estas strings.
+
+A ilustração mais simples é o programa **echo**, que ecoa seus argumentos _command-line_ em uma única linha, separados por _blanks_. Isto é, o comando
+
+```c
+  echo hello, world
+```
+
+imprime a saída
+
+```c
+  hello world
+```
+
+Por convenção, **argv[0]** é o nome pelo qual o programa foi invocado, então **argc** é pelo menos 1. Se **argc** é 1, não há argumentos _command-line_ após o nome do programa. No exemplo acima, **argc** é 3, e **argv[0]**, **argv[1]** e **argv[2]** são "echo", "hello,", e "world" respectivamente. O primeiro argumento opcional é **argv[1]** e o último é **argv[argc - 1]**; adicionalmente, o padrão requer que **argv[argc]** seja um ponteiro **_null_**.
+
+![image](https://user-images.githubusercontent.com/69206952/140829765-d752cad0-11bf-4d7d-b853-3397309dee19.png)
