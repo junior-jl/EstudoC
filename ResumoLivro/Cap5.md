@@ -831,3 +831,29 @@ A sintaxe é similar à inicializações anteriores:
 A declaração de **name**, que é um vetor de ponteiros a caracteres, é similar à declaração de **lineptr** no exemplo de ordenação. O inicializador é uma lista de strings de caracteres; cada uma é atribuída à sua posição correspondente no vetor. Os caracteres da i-ésima string são colocados em algum lugar, e um ponteiro para estes é armazenado em **name[i]**. Já que o tamanho do vetor **name** não é especificado, o compilador conta os inicializadores e preenche com o número correto.
 
 ### Pointers vs. Multi-dimensional Arrays
+
+Recém-chegados em C geralmente possuem dificuldade em entender a diferença entre um vetor de duas dimensões e um vetor de ponteiros, como o **name** no exemplo acima. Dadas as definições
+
+```c
+  int a[10][20];
+  int *b[10];
+```
+
+então **a[3][4]** e **b[3][4]** são ambas referências legais para um único **int**. Mas **a** é um vetor de duas dimensões verdadeiro: 200 localizações do tamanho de um **int** foram separadas, e o cálculo convencional de subscrito retangular **20 x row + col** é usado para encontrar o elemento **a[row][col]**. Para **b**, no entanto, a definição só aloca 10 ponteiros e não os inicializa; esta deve ser feita explicitamente, seja estaticamente ou com código. Assumindo que cada elemento de **b** aponta para um vetor de vinte elementos, então haverá 200 **ints** separados, mais dez células para os ponteiros. A vantagem do vetor de ponteiros é que as linhas do vetor podem ter diferentes comprimentos. Isto é, cada elemento de **b** não precisa apontar para um vetor de vinte elementos; alguns podem apontar para dois, cinquenta ou até mesmo nenhum.
+
+Apesar de estarmos discutindo em termos de inteiros, de longe o uso mais frequente de vetores de ponteiros é para armazenar strings de caracteres de diversos tamanhos, como não função **month_name**. Compara a declaração e a figura para um vetor de ponteiros:
+
+```c
+  char *name[] = { "Illegal month", "Jan", "Feb", "Mar" };
+```
+
+![image](https://user-images.githubusercontent.com/69206952/140828274-23d0b0e8-7cf0-42d9-aa62-5946324aed9f.png)
+
+com as de um vetor de duas dimensões:
+
+```c
+  char aname[][15] = { "Illegal month", "Jan", "Feb", "Mar" };
+```
+
+![image](https://user-images.githubusercontent.com/69206952/140828378-4b37b68a-82f1-4b4c-9dcb-36d945126104.png)
+
