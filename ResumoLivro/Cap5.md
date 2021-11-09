@@ -876,3 +876,43 @@ imprime a saída
 Por convenção, **argv[0]** é o nome pelo qual o programa foi invocado, então **argc** é pelo menos 1. Se **argc** é 1, não há argumentos _command-line_ após o nome do programa. No exemplo acima, **argc** é 3, e **argv[0]**, **argv[1]** e **argv[2]** são "echo", "hello,", e "world" respectivamente. O primeiro argumento opcional é **argv[1]** e o último é **argv[argc - 1]**; adicionalmente, o padrão requer que **argv[argc]** seja um ponteiro **_null_**.
 
 ![image](https://user-images.githubusercontent.com/69206952/140829765-d752cad0-11bf-4d7d-b853-3397309dee19.png)
+
+A primeira versão de **echo** trata **argv** como um vetor de ponteiros de caracteres:
+
+```c
+  //echo command-line arguments; 1st version
+  main(int argc, char *argv[])
+  {
+    int i;
+    
+    for (i = 1; i < argc; i++)
+      printf("%s%s", argv[i], (i < argc - 1) ? " " : "");
+    printf("\n");
+    return 0;
+  } 
+```
+
+Já que **argv** é um ponteiro para um vetor de ponteiros, nós podemos manipular o ponteiro ao invés de indexar o vetor. A próxima variação é baseada em incrementar **argv**, que é um ponteiro para **char**, enquanto  **argc** é contado regressivamente:
+
+```c
+  #include <stdio.h>
+  
+  //echo command-line arguments; 2nd version
+  main(int argc, char *argv[])
+  {
+    while (--argc > 0)
+      printf("%s%s", *++argv, (argc > 1) ? " " : "");
+    printf("\n");
+    return 0;
+  }
+```
+
+Tendo em vista que **argv** é um ponteiro para o início do vetor de strings argumento, incrementá-lo em 1 (**++argv**) o faz apontar para o **argv[1]** original ao invés de **argv[0]**. Cada incremento sucessivo o move para o próximo argumento; **\*argv** é então o ponteiro para tal argumento. Ao mesmo tempo, **argc** é decrementado; quando este se torna zero, não há mais argumentos para imprimir.
+
+Alternativamente, nós poderíamos escrever o _statement_ **printf** como
+
+```c
+  printf((argc > 1) ? "%s " : "%s", *++arggv);
+```
+
+Isto mostra que o argumento de formato de **printf** também pode ser uma expressão.
