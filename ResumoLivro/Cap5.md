@@ -916,3 +916,99 @@ Alternativamente, nós poderíamos escrever o _statement_ **printf** como
 ```
 
 Isto mostra que o argumento de formato de **printf** também pode ser uma expressão.
+
+Como segundo exemplo, vamos fazer alguns ajustes ao programa de encontrar padrões da seção 4.1. Seguindo o programa UNIX **grep**, vamos mudar o programa para que o padrão a ser correspondido seja especificado pelo primeiro argumento na linha de comando.
+
+```c
+  #include <stdio.h>
+  #include <string.h>
+  #define MAXLINE 1000
+  
+  int getline(char *line, int max);
+  
+  //find: imprime linhas que correspondem ao padrão do primeiro argumento
+  main(int argc, char *argv[])
+  {
+    char line[MAXLINE];
+    int found = 0;
+    
+    if (argc != 2)
+      printf("Usage: find pattern\n");
+    else
+      while (getline(line, MAXLINE) > 0)
+        if (strstr(line, argv[1] != NULL) {
+          printf("%s", line);
+          found++;
+        }
+    return found;
+  }
+```
+
+A função da biblioteca padrão **strstr(s,t)** retorna um ponteiro para a primeira ocorrência da string **t** na string **s**, ou **NULL** se não há ocorrência. Esta é declarada em **<string.h>**.
+
+O modelo agora pode ser elaborado para ilustrar outras construções com ponteiros. Suponha que queiramos permitir dois argumentos opcionais. Um diz "imprima todas as linhas **exceto** aquelas que correspondem ao padrão;" e o segundo diz "cada linha impressa deve suceder seu número de linha.".
+
+Uma convenção comum em programas C em sistemas UNIX é que um argumento que começa com um sinal de menos introduz uma _flag_ opcional ou parâmetro. Se nós escolhermos **-x** (para "exceto") para sinalizar a inversão, e **-n** ("número") para solicitar a numeração de linha, então o comando
+
+```c
+  find -x -n pattern
+```
+
+irá imprimir cada linha que não corresponde ao padrão, precedida pelo seu número de linha.
+
+Argumentos opcionais devem ser permitidos em qualquer ordem, e o resto do programa deve ser independente do número de argumentos que está presente. Além disso, é conveniente para usuários que argumentos opcionais possam ser combinados, como em
+
+```c
+  find -nx pattern
+```
+
+Aqui está o programa:
+
+```c
+  #include <stdio.h>
+  #include <string.h>
+  #define MAXLINE 1000
+  
+  int getline (char *line, int max);
+  
+  //find: imprime linhas que correspondem ao primeiro argumento
+  main(int argc, char *argv[])
+  {
+    char line[MAXLINE];
+    long lineno = 0;
+    int c, except = 0, number = 0, found = 0;
+    
+    while (--argc > 0 && (*++argv)[0] == '-')
+      while (c = *++argv[0])
+        switch (c) {
+        case 'x':
+          except = 1;
+          break;
+        case 'n':
+          number = 1;
+          break;
+        default:
+          printf("find: illegal option %c\n", c);
+          argc = 0;
+          found = -1;
+          break;
+        }
+    if (argc != 1)
+      printf("Usage: find -x -n pattern\n");
+    else
+      while (getline(line, MAXLINE) > 0) {
+        lineno++;
+        if ((strstr(line, *argv) != NULL) != except) {
+          if (number)
+            printf("%ld:", lineno);
+          printf("%s", line);
+          found++;
+        }
+      }
+    return found;
+  }
+```
+
+**argc** é decrementado e **argv** é incrementado antes de cada argumento opcinoal. No fim do loop, se há erros, **argc** mostra quantos argumentos ainda não foram processados e **argv** aponta para o primeiro destes. Logo, **argc** deve ser 1 e **\*argv** deve apontar para o padrão. Note que **\*++argv** é um ponteiro para um argumento string, então **(\*++argv)[0]** é o primeiro caractere. (Uma forma alternativa seria **\*\*++argv**.). Sem os parênteses, a expressão tornaria-se **\*++(argv[0])**, a qual, de fato, é utilizada no _loop_ mais interno, onde a tarefa é marchar ao longo de um específico argumento de string. No loop interno, a expressão **\*++argv[0]** incrementa o ponteiro **argv[0]**!
+
+Dificilmente, são encontradas utilizações de expressões com ponteiros mais complicadas que estas; em tais casos, deve-se dividir em dois ou mais passos para tornar o código mais intuitivo. 
