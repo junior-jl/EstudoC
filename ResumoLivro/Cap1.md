@@ -279,7 +279,7 @@ main() {
 
 O operador relacional != significa "não é igual a".
 
-O que aparente ser um caractere no teclado ou na tela é, como todas as outras coisas, armazenado internamente como um padrão de bits. O tipo **char** é especificamente feito para armazenar tais dados, mas o tipo **int** pode ser usado, e, neste caso, foi utilizado por uma razão importante.
+O que aparenta ser um caractere no teclado ou na tela é, como todas as outras coisas, armazenado internamente como um padrão de bits. O tipo **char** é especificamente feito para armazenar tais dados, mas o tipo **int** pode ser usado, e, neste caso, foi utilizado por uma razão importante.
 
 O problema é distinguir o final da entrada de um dado válido. A solução é que **getchar** retorna um valor característico quando não há mais entrada, um valor que não pode ser confundido com qualquer caractere real. Tal valor é chamado **EOF** (end of file - fim do arquivo). Logo, deve-se declarar **c** como um tipo grande suficiente para armazenar qualquer valor que **getchar** retorne. Não se pode usar **char** já que **c** deve ser grande o suficiente para conter **EOF** em adição a qualquer **char** possível. Assim, usa-se **int**. (**EOF** é um inteiro definido em **<stdio.h>**).
 
