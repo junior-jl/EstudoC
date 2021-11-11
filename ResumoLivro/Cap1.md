@@ -61,7 +61,7 @@ Um número **float** geralmente é uma quantidade de 32-bits com pelo menos seis
 Em C, ainda existem outros tipos básicos de dados além de **int** e **float**, incluindo:
 Tipo | Significado
 ------------ | -------------
-char | character (a single bit)
+char | character (a single byte)
 short | short integer
 long | long integer
 double | double-precision floating point
