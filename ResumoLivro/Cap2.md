@@ -5,7 +5,7 @@
   
 Variáveis e constantes são os objetos de dados básicos manipulados em um programa.
 
-Declarações listam as variáveis que serão usadas, seus tipos e talvez seus valores iniciais.
+Declarações listam as variáveis que serão usadas, seus tipos e, talvez seus valores iniciais.
 
 Operadores especificam o que é feito com as variáveis.
 
@@ -15,7 +15,7 @@ O tipo de um objeto determina o conjunto de valores que este pode assumir e quai
 nele.
 
 O padrão ANSI fez pequenas mudanças nos tipos básicos e expressões. Existem agora tipos **signed** e **unsigned**
-de todos os tipos inteiros. Operações em ponto flutuante podem ser feita com precisão singular. Também
+de todos os tipos inteiros. Operações em ponto flutuante podem ser feitas com precisão singular. Também
 existe o tipo **long double** para precisão estendida. _String constants_ podem ser concatenadas. 
 Objetos podem ser declarados como **const**, prevenindo qualquer mudança.
 
