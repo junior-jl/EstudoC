@@ -137,6 +137,7 @@ Tecnicamente, uma _string constant_ é um vetor de caracteres. A representação
 Assim, um programa que retorna o comprimento de uma string **s** é:
  
  ```c
+  
  int strlen(char s[]){
   int i;
  
