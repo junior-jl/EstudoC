@@ -5,7 +5,7 @@
   
 Variáveis e constantes são os objetos de dados básicos manipulados em um programa.
 
-Declarações listam as variáveis que seram usadas, seus tipos e talvez seus valores iniciais.
+Declarações listam as variáveis que serão usadas, seus tipos e talvez seus valores iniciais.
 
 Operadores especificam o que é feito com as variáveis.
 
