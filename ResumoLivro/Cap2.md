@@ -302,7 +302,7 @@ Um argumento de uma função é uma expressão, logo, conversões ocorrem quando
 Conversões podem ser forçadas em qualquer expressão, com o operador unário chamado _**cast**_. Na construção
 
 ```c
- (**tipo**) expressão
+ (tipo) expressão
 ```
 
 a **expressão** é convertida para o tipo nomeado pelas regras mencionadas. O significado preciso do **cast** é como se a expressão fosse atribuída a uma variável do tipo especificado. Por exemplo, a rotina **sqrt** (da biblioteca **<math.h>** espera um argumento **double** e produz um resultado sem sentido caso não seja fornecido um valor de tal tipo. Logo, se **n** é um inteiro, pode-se fazer
